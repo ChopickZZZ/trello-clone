@@ -1,9 +1,21 @@
+<script setup lang="ts">
+import TaskCard from "./TaskCard.vue";
+import AppButton from "./AppButton.vue";
+import { BoardInfo } from '../types'
+
+interface Props {
+  board: BoardInfo
+}
+const props = defineProps<Props>()
+
+</script>
+
 <template>
   <div class="board">
     <div class="board__top top-board">
       <div class="top-board__status">
-        Discover
-        <span>2</span>
+        {{ props.board.status }}
+        <span>{{ props.board.cardsAmount }}</span>
       </div>
       <div class="top-board__dropdown">
         <font-awesome-icon icon="ellipsis" />
@@ -15,20 +27,6 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
-import TaskCard from "./TaskCard.vue";
-import AppButton from "./AppButton.vue";
-
-export default defineComponent({
-  setup() {},
-  components: {
-    TaskCard,
-    AppButton,
-  },
-});
-</script>
 
 <style scoped>
 .board {

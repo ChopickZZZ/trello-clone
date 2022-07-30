@@ -1,26 +1,20 @@
+<script setup lang="ts">
+interface Props {
+  color?: string
+}
+const props = withDefaults(defineProps<Props>(), {
+  color: '#fff'
+})
+</script>
+
 <template>
-  <button class="main-button" :style="{ backgroundColor: color }">
+  <button class="main-button" :style="{ backgroundColor: props.color }">
     <span>
       <slot name="symbol">+</slot>
     </span>
     <slot name="default"></slot>
   </button>
 </template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
-
-export default defineComponent({
-  props: {
-    color: {
-      type: String,
-      default: "#fff",
-    },
-  },
-  setup() {},
-});
-</script>
-
 
 <style scoped>
 .main-button {

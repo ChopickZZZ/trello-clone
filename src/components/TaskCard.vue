@@ -1,3 +1,6 @@
+<script setup lang="ts">
+</script>
+
 <template>
   <div class="card">
     <div class="card__top">
@@ -24,14 +27,6 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
-
-export default defineComponent({
-  setup() {},
-});
-</script>
 
 <style scoped>
 .card {
