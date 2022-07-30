@@ -11,7 +11,7 @@
     </div>
     <div class="board__inner inner-board">
       <TaskCard />
-      <button class="inner-board__button btn"><span>+</span> Add Card</button>
+      <AppButton>Add Task</AppButton>
     </div>
   </div>
 </template>
@@ -19,11 +19,13 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import TaskCard from "./TaskCard.vue";
+import AppButton from "./AppButton.vue";
 
 export default defineComponent({
   setup() {},
   components: {
     TaskCard,
+    AppButton,
   },
 });
 </script>
@@ -65,30 +67,5 @@ export default defineComponent({
   border-radius: 0.5rem;
   max-height: 60rem;
   overflow: auto;
-}
-
-.inner-board__button {
-  width: 100%;
-  background-color: #fff;
-  padding: 0.8rem 0;
-  border-radius: 0.7rem;
-  box-shadow: rgb(0 0 0 / 26%) 0px 3px 3px, rgb(0 0 0 / 6%) 0px 6px 6px;
-  transition: all 0.3s ease;
-}
-
-.inner-board__button:hover {
-  transform: translateY(-0.25rem);
-  box-shadow: rgb(0 0 0 / 26%) 0px 3px 6px, rgb(0 0 0 / 6%) 0px 6px 9px;
-}
-
-.inner-board__button:active {
-  transform: translateY(-0.1rem);
-  box-shadow: rgb(0 0 0 / 26%) 0px 3px 4px, rgb(0 0 0 / 6%) 0px 6px 7px;
-}
-
-.inner-board__button span {
-  font-size: 2rem;
-  margin-right: 0.5rem;
-  margin-top: -0.2rem;
 }
 </style>

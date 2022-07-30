@@ -1,25 +1,28 @@
 <template>
-  <div class="container">
+  <div class="container" style="margin-top: 5rem">
     <div class="board-container">
-      <TaskBoard v-for="board in 4" :key="board" />
+      <TaskBoard v-for="board in 3" :key="board" />
+      <BoardCreator />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import TaskBoard from "../components/TaskBoard.vue";
 import { defineComponent } from "vue";
+import TaskBoard from "../components/TaskBoard.vue";
+import BoardCreator from "../components/BoardCreator.vue";
 
 export default defineComponent({
   setup() {},
-  components: { TaskBoard },
+  components: { TaskBoard, BoardCreator },
 });
 </script>
 
 <style scoped>
 .board-container {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  align-items: start;
   gap: 2rem;
 }
 </style>
