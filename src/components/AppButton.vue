@@ -1,11 +1,12 @@
 <script setup lang="ts">
-interface Props {
+
+interface ButtonProps {
   color?: string,
-  bgColor?: string
+  bgColor?: string,
 }
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<ButtonProps>(), {
   color: '#000',
-  bgColor: '#fff'
+  bgColor: '#fff',
 })
 </script>
 

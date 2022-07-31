@@ -4,11 +4,13 @@ import { ref } from 'vue';
 
 interface InputProps {
    placeholder: string,
-   buttonsBgColors?: string
+   buttonsBgColors?: string,
+   btnText?: string
 }
 
 const props = withDefaults(defineProps<InputProps>(), {
-   buttonsBgColors: 'salmon:lightblue'
+   buttonsBgColors: 'salmon:lightblue',
+   btnText: 'Add board'
 })
 
 const [firstBgColor, secondBgColor]: string[] = props.buttonsBgColors.split(':')
@@ -35,7 +37,7 @@ const inputCancel = (): void => {
    <div class="input-form" v-bind="$attrs">
       <input type="text" :placeholder="props.placeholder" v-model="inputValue" />
       <div class="input-form__buttons">
-         <AppButton :bg-color="firstBgColor" color="#fff" @click="inputHandler">Add Board</AppButton>
+         <AppButton :bg-color="firstBgColor" color="#fff" @click="inputHandler">{{ props.btnText }}</AppButton>
          <AppButton :bg-color="secondBgColor" color="#fff" @click="inputCancel">
             <template #symbol>
                <fa-icon icon="xmark" />

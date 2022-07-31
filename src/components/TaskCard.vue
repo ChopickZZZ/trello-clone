@@ -1,30 +1,43 @@
 <script setup lang="ts">
+import { computed } from 'vue';
+import { CardInfo } from '../types';
+
+const props = defineProps<{
+  card: CardInfo
+}>()
+
+const tasksDone = computed(() => props.card.tasks?.filter(task => task.isDone === true))
+
 </script>
 
 <template>
   <div class="card">
     <div class="card__top">
-      <h2 class="card__theme theme">Urgent</h2>
+      <ul class="card__labels">
+        <li class="card__label theme" v-for="label in props.card.labels" :style="{ backgroundColor: label.color }">
+          {{ label.text }}
+        </li>
+      </ul>
       <div class="card__dropdown">
         <fa-icon class="fa-ellipsis" icon="ellipsis" />
       </div>
     </div>
-    <h3 class="card__title">Task 1</h3>
-    <div class="card__desc">
-      <fa-icon class="card__desc-icon" icon="bars-staggered" />
+    <h3 class="card__title">{{ props.card.title }}</h3>
+    <div class="card__desc" v-if="props.card.description">
+      <fa-icon class="card__desc-icon" icon="bars-staggered" :title="props.card.description" />
     </div>
-    <div class="card__details details">
-      <div class="details-content">
+    <div class="card__details details" v-if="props.card.date || props.card.tasks">
+      <div class="details-content" v-if="props.card.date">
         <div class="details-content__icon">
           <fa-icon class="fa-details" icon="clock" />
         </div>
-        <p class="details-content__text">5 May</p>
+        <p class="details-content__text">{{ props.card.date }}</p>
       </div>
-      <div class="details-content">
+      <div class="details-content" v-if="props.card.tasks">
         <div class="details-content__icon">
           <fa-icon class="fa-details" icon="calendar-check" />
         </div>
-        <p class="details-content__text">3/3</p>
+        <p class="details-content__text">{{ tasksDone?.length }} / {{ props.card.tasks?.length }}</p>
       </div>
     </div>
   </div>
@@ -56,7 +69,12 @@
   align-items: center;
 }
 
-.card__theme {
+.card__labels {
+  display: flex;
+  gap: 1rem;
+}
+
+.card__label {
   font-size: 1.45rem;
   padding: 0.35rem 1rem;
   color: #fff;

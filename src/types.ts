@@ -1,15 +1,25 @@
 export interface BoardInfo {
-   id?: string,
+   id: string,
    status: string,
    cardsAmount?: number
 }
 
 export interface CardInfo {
    id: string,
-   theme: string,
    title: string,
    description?: string,
-   labels?: string[],
-   tasks?: string[]
+   date: string,
+   labels?: Label[],
+   tasks?: Task[]
    boardId: string
+}
+
+export interface Label {
+   text: string,
+   color: string
+}
+
+export interface Task {
+   text: string,
+   isDone: boolean
 }

@@ -2,10 +2,38 @@
 import AppButton from '../components/AppButton.vue';
 import ModalLabels from '../components/ModalLabels.vue';
 import ModalTasks from '../components/ModalTasks.vue';
+import { reactive, computed } from 'vue';
+import { CardInfo, Task, Label } from '../types';
+import { useCardStore } from '../stores/tasks';
 
 const emit = defineEmits<{
   (event: 'modal-close'): void
 }>()
+
+interface ModalProps {
+  boardId: string
+}
+
+const props = defineProps<ModalProps>()
+
+const card: CardInfo = reactive({
+  id: 'c' + Math.random(),
+  title: '',
+  description: '',
+  date: '',
+  boardId: props.boardId
+})
+
+const addLabels = (actualLabels: Label[]): Label[] => card.labels = actualLabels
+const addTasks = (actualTasks: Task[]): Task[] => card.tasks = actualTasks
+
+const cardStore = useCardStore()
+
+const add = () => {
+  cardStore.addCard(card)
+  emit('modal-close')
+}
+
 </script>
 
 <template>
@@ -16,20 +44,21 @@ const emit = defineEmits<{
         <fa-icon class="content__label-icon" icon="t" />
         <label class="content__label" for="title">Title</label>
       </div>
-      <input class="content__input" type="text" id="title" placeholder="Add task title" />
+      <input class="content__input" type="text" id="title" placeholder="Add task title" v-model="card.title" />
       <div class="content__label-container">
         <fa-icon class="content__label-icon" icon="bars-staggered" />
         <label class="content__label" for="description">Description</label>
       </div>
-      <input class="content__input" type="text" id="description" placeholder="Add description" />
+      <input class="content__input" type="text" id="description" placeholder="Add description"
+        v-model="card.description" />
       <div class="content__label-container">
         <fa-icon class="content__label-icon" icon="calendar-days" />
         <label class="content__label" for="date">Date</label>
       </div>
-      <input class="content__input" type="date" id="date" />
-      <ModalLabels />
-      <ModalTasks />
-      <AppButton bg-color="#379906" color="#fff">Add Card</AppButton>
+      <input class="content__input" type="date" id="date" v-model="card.date" />
+      <ModalLabels @add="addLabels" />
+      <ModalTasks @add="addTasks" />
+      <AppButton bg-color="#379906" color="#fff" @click="add">Add Card</AppButton>
     </div>
   </div>
 </template>

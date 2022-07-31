@@ -1,18 +1,17 @@
 <script setup lang="ts">
 import TaskCard from "./TaskCard.vue";
 import AppButton from "./AppButton.vue";
+import AppModal from "../ui/AppModal.vue";
 import { BoardInfo } from '../types'
 import { useCardStore } from "../stores/tasks";
-import { computed } from "vue";
+import { ref, computed } from "vue";
 
 interface Props {
   board: BoardInfo
 }
 const props = defineProps<Props>()
 
-const emit = defineEmits<{
-  (event: 'modal-open'): void
-}>()
+const isOpen = ref(false)
 
 const cardStore = useCardStore()
 const cards = computed(() => {
@@ -33,8 +32,11 @@ const cards = computed(() => {
       </div>
     </div>
     <div class="board__inner inner-board">
-      <TaskCard v-for="card in cards" :key="card.id" />
-      <AppButton @click="emit('modal-open')">Add Card</AppButton>
+      <TaskCard v-for="card in cards" :key="card.id" :card="card" />
+      <AppButton @click="isOpen = true">Add Card</AppButton>
+      <teleport to="#app">
+        <AppModal v-if="isOpen" v-lock @modal-close="isOpen = false" :board-id="props.board.id" />
+      </teleport>
     </div>
   </div>
 </template>

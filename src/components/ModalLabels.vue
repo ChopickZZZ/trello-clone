@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import AppButton from './AppButton.vue';
-import { Ref, ref } from 'vue';
 import AppInput from './AppInput.vue';
+import { Ref, ref } from 'vue';
+import { Label } from "../types"
 
-interface Label {
-   text: string,
-   color: string
-}
+const emit = defineEmits<{
+   (event: 'add', labels: Label[]): void
+}>()
 
 const colors: string[] = ['salmon', 'lightblue', '#777', '#379906', '#99066f', '#8a0c0c', '#000', '#0c138a']
 const labelColor = ref('')
@@ -23,6 +23,7 @@ const addLabel = (inputText: string): void => {
       isCreating.value = false
       labelColor.value = ''
    }
+   emit('add', labels.value)
 }
 
 const removeLabel = (idx: number): void => {
@@ -59,8 +60,8 @@ const cancel = (): void => {
          <template #symbol>+</template>
       </AppButton>
    </div>
-   <AppInput placeholder="Enter Label Name" @submit="addLabel" @cancel="cancel" style="padding: 0; margin-bottom: 2rem;"
-      v-else />
+   <AppInput placeholder="Enter Label Name" btn-text="Add Label" @submit="addLabel" @cancel="cancel"
+      style="padding: 0; margin-bottom: 2rem;" v-else />
 </template>
 
 <style scoped>
@@ -131,23 +132,5 @@ const cancel = (): void => {
 .content__button-container {
    width: 25rem;
    margin-bottom: 2rem;
-}
-
-.label-creator__form {
-   width: 25rem;
-   margin-bottom: 2rem;
-}
-
-.label-creator__form input {
-   width: 100%;
-   background-color: rgb(235, 235, 235);
-   padding: 1rem 2rem;
-   border-radius: .5rem;
-   margin-bottom: .9rem;
-}
-
-.label-creator__buttons {
-   display: flex;
-   gap: 1.5rem;
 }
 </style>

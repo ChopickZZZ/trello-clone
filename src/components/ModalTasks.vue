@@ -2,11 +2,11 @@
 import AppButton from './AppButton.vue';
 import AppInput from './AppInput.vue';
 import { ref, Ref, computed } from 'vue'
+import { Task } from '../types'
 
-interface Task {
-   text: string,
-   isDone: boolean
-}
+const emit = defineEmits<{
+   (event: 'add', tasks: Task[]): void
+}>()
 
 const isCreating = ref(false)
 const tasks: Ref<Task[]> = ref([])
@@ -17,6 +17,7 @@ const createTask = (inputValue: string): void => {
       isDone: false
    })
    isCreating.value = false
+   emit('add', tasks.value)
 }
 
 const removeTask = (idx: number): void => {
@@ -61,8 +62,8 @@ const cancel = (): void => {
    </div>
    <AppButton style="margin-bottom: 2.5rem; width: 25rem" @click="isCreating = true" v-if="!isCreating">Add Task
    </AppButton>
-   <AppInput placeholder="Enter task" buttons-bg-colors="rgb(6, 125, 165):#750404" @submit="createTask" @cancel="cancel"
-      style="padding: 0; margin-bottom: 2rem" v-else />
+   <AppInput placeholder="Enter task" btn-text="Add task" buttons-bg-colors="rgb(6, 125, 165):#750404"
+      @submit="createTask" @cancel="cancel" style="padding: 0; margin-bottom: 2rem" v-else />
 </template>
 
 <style scoped>
@@ -131,23 +132,5 @@ const cancel = (): void => {
 .content__label-icon {
    margin-right: 1rem;
    color: rgb(90, 90, 90);
-}
-
-.task-creator__form {
-   width: 25rem;
-   margin-bottom: 2.5rem;
-}
-
-.task-creator__form input {
-   width: 100%;
-   background-color: rgb(235, 235, 235);
-   padding: 1rem 2rem;
-   border-radius: .5rem;
-   margin-bottom: .9rem;
-}
-
-.task-creator__buttons {
-   display: flex;
-   gap: 1.5rem;
 }
 </style>
