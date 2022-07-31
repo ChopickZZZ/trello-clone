@@ -2,19 +2,17 @@
 import { ref } from "vue";
 import { useBoardStore } from "../stores/boards";
 import AppButton from "./AppButton.vue";
+import AppInput from "./AppInput.vue";
 
 const isCreating = ref(false);
-const boardStatus = ref("");
 const boardStore = useBoardStore();
 
-const submit = (): void => {
-  boardStore.addBoard({ status: boardStatus.value });
-  boardStatus.value = ''
+const boardAdd = (inputText: string): void => {
+  boardStore.addBoard({ status: inputText });
   isCreating.value = false
 };
 
 const cancel = (): void => {
-  boardStatus.value = ''
   isCreating.value = false
 }
 </script>
@@ -24,38 +22,9 @@ const cancel = (): void => {
     <AppButton v-if="!isCreating" @click="isCreating = true">
       Add Board
     </AppButton>
-    <div class="board-creator__form" v-if="isCreating">
-      <input type="text" placeholder="Enter Board Name" v-model="boardStatus" />
-      <div class="board-creator__buttons">
-        <AppButton bg-color="salmon" color="#fff" @click="submit">Add Board</AppButton>
-        <AppButton bg-color="lightblue" color="#fff" @click="cancel">
-          <template #symbol>
-            <fa-icon icon="xmark" />
-          </template>
-        </AppButton>
-      </div>
-    </div>
+    <AppInput placeholder="Enter Board Name" @submit="boardAdd" @cancel="cancel" v-else />
   </div>
 </template>
 
 <style scoped>
-.board-creator__form {
-  padding: 0.9rem;
-  background-color: #fff;
-  border-radius: 0.35rem;
-}
-
-.board-creator input {
-  min-height: 4rem;
-  padding: 0.5rem 1rem;
-  border: 1px solid salmon;
-  width: 100%;
-  border-radius: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.board-creator__buttons {
-  display: flex;
-  gap: 1rem;
-}
 </style>

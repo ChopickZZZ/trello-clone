@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AppButton from './AppButton.vue';
 import { Ref, ref } from 'vue';
+import AppInput from './AppInput.vue';
 
 interface Label {
    text: string,
@@ -10,18 +11,16 @@ interface Label {
 const colors: string[] = ['salmon', 'lightblue', '#777', '#379906', '#99066f', '#8a0c0c', '#000', '#0c138a']
 const labelColor = ref('')
 
-const label = ref('')
 let labels: Ref<Label[]> = ref([])
 
 const isCreating = ref(false)
-const addLabel = (): void => {
-   if (label.value) {
+const addLabel = (inputText: string): void => {
+   if (inputText) {
       labels.value.push({
-         text: label.value,
+         text: inputText,
          color: labelColor.value
       })
       isCreating.value = false
-      label.value = ''
       labelColor.value = ''
    }
 }
@@ -31,7 +30,6 @@ const removeLabel = (idx: number): void => {
 }
 const cancel = (): void => {
    isCreating.value = false
-   label.value = ''
 }
 
 </script>
@@ -61,17 +59,8 @@ const cancel = (): void => {
          <template #symbol>+</template>
       </AppButton>
    </div>
-   <div class="label-creator__form" v-if="isCreating">
-      <input type="text" placeholder="Enter Label Name" v-model="label" />
-      <div class="label-creator__buttons">
-         <AppButton color="#fff" bg-color="salmon" type="submit" @click="addLabel">Add Label</AppButton>
-         <AppButton color="#fff" bg-color="lightblue" @click="cancel" type="cancel">
-            <template #symbol>
-               <fa-icon icon="xmark" />
-            </template>
-         </AppButton>
-      </div>
-   </div>
+   <AppInput placeholder="Enter Label Name" @submit="addLabel" @cancel="cancel" style="padding: 0; margin-bottom: 2rem;"
+      v-else />
 </template>
 
 <style scoped>

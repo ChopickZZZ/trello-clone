@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AppButton from './AppButton.vue';
+import AppInput from './AppInput.vue';
 import { ref, Ref, computed } from 'vue'
 
 interface Task {
@@ -8,18 +9,14 @@ interface Task {
 }
 
 const isCreating = ref(false)
-
 const tasks: Ref<Task[]> = ref([])
-const task = ref('')
 
-const createTask = (): void => {
+const createTask = (inputValue: string): void => {
    tasks.value.push({
-      text: task.value,
+      text: inputValue,
       isDone: false
    })
-   task.value = ''
    isCreating.value = false
-   console.log(tasks.value)
 }
 
 const removeTask = (idx: number): void => {
@@ -32,7 +29,6 @@ const progressLength = computed(() => {
 })
 
 const cancel = (): void => {
-   task.value = ''
    isCreating.value = false
 }
 </script>
@@ -65,17 +61,8 @@ const cancel = (): void => {
    </div>
    <AppButton style="margin-bottom: 2.5rem; width: 25rem" @click="isCreating = true" v-if="!isCreating">Add Task
    </AppButton>
-   <div class="task-creator__form" v-if="isCreating">
-      <input type="text" placeholder="Enter task" v-model="task" />
-      <div class="task-creator__buttons">
-         <AppButton color="#fff" bg-color="rgb(6, 125, 165)" @click="createTask">Add task</AppButton>
-         <AppButton color="#fff" bg-color="#750404" @click="cancel">
-            <template #symbol>
-               <fa-icon icon="xmark" />
-            </template>
-         </AppButton>
-      </div>
-   </div>
+   <AppInput placeholder="Enter task" buttons-bg-colors="rgb(6, 125, 165):#750404" @submit="createTask" @cancel="cancel"
+      style="padding: 0; margin-bottom: 2rem" v-else />
 </template>
 
 <style scoped>
