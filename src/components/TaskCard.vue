@@ -10,7 +10,9 @@
       </div>
     </div>
     <h3 class="card__title">Task 1</h3>
-    <div class="card__edit">icon</div>
+    <div class="card__desc">
+      <font-awesome-icon class="card__desc-icon" icon="bars-staggered" />
+    </div>
     <div class="card__details details">
       <div class="details-content">
         <div class="details-content__icon">
@@ -68,8 +70,17 @@
   margin-bottom: 1.2rem;
 }
 
-.card__edit {
+.card__desc {
   margin-bottom: 1.2rem;
+}
+
+.card__desc-icon {
+  color: rgb(90, 90, 90);
+  transition: .3s ease;
+}
+
+.card__desc-icon:hover {
+  color: #000;
 }
 
 .card__details {

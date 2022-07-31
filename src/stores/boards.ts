@@ -11,7 +11,9 @@ export const useBoardStore = defineStore('boards', {
    actions: {
       addBoard({ status }: BoardInfo) {
          const cardsAmount = 0
+         const id = 'b' + Math.random()
          const board = {
+            id,
             status,
             cardsAmount
          }

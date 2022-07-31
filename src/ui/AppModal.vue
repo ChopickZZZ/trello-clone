@@ -1,51 +1,32 @@
+<script setup lang="ts">
+import AppButton from '../components/AppButton.vue';
+import TaskLabel from '../components/TaskLabel.vue';
+
+const emit = defineEmits<{
+  (event: 'modal-close'): void
+}>()
+</script>
+
 <template>
   <div class="modal">
-    <div class="modal__backdrop"></div>
+    <div class="modal__backdrop" @click="emit('modal-close')"></div>
     <div class="modal__content content">
       <div class="content__label-container">
         <font-awesome-icon class="content__label-icon" icon="t" />
         <label class="content__label" for="title">Title</label>
       </div>
-      <input
-        class="content__input"
-        type="text"
-        id="title"
-        placeholder="Add task title"
-      />
+      <input class="content__input" type="text" id="title" placeholder="Add task title" />
       <div class="content__label-container">
         <font-awesome-icon class="content__label-icon" icon="bars-staggered" />
         <label class="content__label" for="description">Description</label>
       </div>
-      <input
-        class="content__input"
-        type="text"
-        id="description"
-        placeholder="Add description"
-      />
+      <input class="content__input" type="text" id="description" placeholder="Add description" />
       <div class="content__label-container">
         <font-awesome-icon class="content__label-icon" icon="calendar-days" />
         <label class="content__label" for="date">Date</label>
       </div>
       <input class="content__input" type="date" id="date" />
-      <div class="content__label-container">
-        <font-awesome-icon class="content__label-icon" icon="tag" />
-        <label class="content__label" for="labels">Labels</label>
-      </div>
-      <div class="content__theme theme">
-        Urgent
-        <font-awesome-icon class="content__theme-icon" icon="xmark" />
-      </div>
-      <ul class="content__colors">
-        <li class="content__color"></li>
-        <li class="content__color"></li>
-        <li class="content__color"></li>
-        <li class="content__color"></li>
-        <li class="content__color"></li>
-        <li class="content__color"></li>
-        <li class="content__color"></li>
-        <li class="content__color"></li>
-      </ul>
-      <button class="content__button">Add label <span>+</span></button>
+      <TaskLabel />
       <div class="content__label-container">
         <font-awesome-icon class="content__label-icon" icon="circle-check" />
         <label class="content__label" for="description">Tasks</label>
@@ -82,18 +63,13 @@
           </div>
         </div>
       </div>
-      <button class="content__button">Add a task <span>+</span></button>
+      <div class="tasks__btn-container">
+        <AppButton>Add Task</AppButton>
+        <AppButton :color="'lime'">Add Card</AppButton>
+      </div>
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
-
-export default defineComponent({
-  setup() {},
-});
-</script>
 
 <style scoped>
 .modal {
@@ -148,59 +124,11 @@ export default defineComponent({
 }
 
 .content__input {
+  width: 25rem;
   background-color: rgb(235, 235, 235);
   padding: 1rem 2rem;
   border-radius: 0.3rem;
   margin-bottom: 3rem;
-}
-
-.content__theme {
-  margin-bottom: 1.5rem;
-  cursor: pointer;
-}
-
-.content__theme-icon {
-  margin-left: 0.6rem;
-  margin-bottom: -0.1rem;
-}
-
-.content__colors {
-  display: flex;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.content__color {
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 50%;
-  transition: transform 0.3s ease;
-  cursor: pointer;
-  background-color: #000;
-}
-
-.content__color:hover {
-  transform: scale(1.15);
-}
-
-.content__button {
-  color: #fff;
-  padding: 0.7rem 2rem;
-  background-color: rgb(90, 90, 90);
-  border-radius: 1rem;
-  transition: 0.3s ease;
-}
-
-.content__button:hover {
-  transform: translateY(-0.2rem);
-  background-color: #000;
-  box-shadow: rgb(0 0 0 / 26%) 0px 3px 6px, rgb(0 0 0 / 6%) 0px 6px 9px;
-}
-
-.content__button span {
-  font-size: 2rem;
-  margin-left: 1rem;
-  margin-top: -0.25rem;
 }
 
 .content__progress-bar,
@@ -258,7 +186,9 @@ export default defineComponent({
   color: #000;
 }
 
-button:not(:last-child) {
-  margin-bottom: 3rem;
+.tasks__btn-container {
+  width: 100%;
+  display: flex;
+  gap: 2rem;
 }
 </style>

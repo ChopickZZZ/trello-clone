@@ -2,11 +2,22 @@
 import TaskCard from "./TaskCard.vue";
 import AppButton from "./AppButton.vue";
 import { BoardInfo } from '../types'
+import { useCardStore } from "../stores/tasks";
+import { computed } from "vue";
 
 interface Props {
   board: BoardInfo
 }
 const props = defineProps<Props>()
+
+const emit = defineEmits<{
+  (event: 'modal-open'): void
+}>()
+
+const cardStore = useCardStore()
+const cards = computed(() => {
+  return cardStore.cards.filter(card => card.boardId === props.board.id)
+})
 
 </script>
 
@@ -22,8 +33,8 @@ const props = defineProps<Props>()
       </div>
     </div>
     <div class="board__inner inner-board">
-      <TaskCard />
-      <AppButton>Add Task</AppButton>
+      <TaskCard v-for="card in cards" :key="card.id" />
+      <AppButton @click="emit('modal-open')">Add Card</AppButton>
     </div>
   </div>
 </template>
