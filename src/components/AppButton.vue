@@ -1,14 +1,16 @@
 <script setup lang="ts">
 interface Props {
-  color?: string
+  color?: string,
+  bgColor?: string
 }
 const props = withDefaults(defineProps<Props>(), {
-  color: '#fff'
+  color: '#000',
+  bgColor: '#fff'
 })
 </script>
 
 <template>
-  <button class="main-button" :style="{ backgroundColor: props.color }">
+  <button class="main-button" :style="{ backgroundColor: props.bgColor, color: props.color }" v-bind="$attrs">
     <span>
       <slot name="symbol">+</slot>
     </span>
@@ -18,6 +20,9 @@ const props = withDefaults(defineProps<Props>(), {
 
 <style scoped>
 .main-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
   font-weight: 700;
   width: 100%;
   padding: 0.8rem 0;

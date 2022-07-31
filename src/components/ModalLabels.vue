@@ -14,7 +14,7 @@ const label = ref('')
 let labels: Ref<Label[]> = ref([])
 
 const isCreating = ref(false)
-const addLabel = () => {
+const addLabel = (): void => {
    if (label.value) {
       labels.value.push({
          text: label.value,
@@ -29,7 +29,7 @@ const addLabel = () => {
 const removeLabel = (idx: number): void => {
    labels.value = labels.value.filter((_, index) => index !== idx)
 }
-const cancel = () => {
+const cancel = (): void => {
    isCreating.value = false
    label.value = ''
 }
@@ -38,14 +38,14 @@ const cancel = () => {
 
 <template>
    <div class="content__label-container">
-      <font-awesome-icon class="content__label-icon" icon="tag" />
+      <fa-icon class="content__label-icon" icon="tag" />
       <label class="content__label" for="labels">Labels</label>
    </div>
    <div class="content__labels" v-if="labels.length">
       <div class="content__theme theme" v-for="(label, idx) in labels" :key="'l' + idx"
          :style="{ backgroundColor: label.color }">
          {{ label.text }}
-         <font-awesome-icon class="content__theme-icon" icon="xmark" @click="removeLabel(idx)" />
+         <fa-icon class="content__theme-icon" icon="xmark" @click="removeLabel(idx)" />
       </div>
    </div>
    <div class="content__colors" v-if="colors.length">
@@ -55,14 +55,19 @@ const cancel = () => {
          <span :style="{ backgroundColor: color }"></span>
       </label>
    </div>
-   <button class="content__button" v-if="!isCreating" @click="isCreating = true">Add label<span>+</span></button>
+   <div class="content__button-container" v-if="!isCreating">
+      <AppButton v-if="!isCreating" @click="isCreating = true" bg-color="rgb(90, 90, 90)" color="#fff">
+         Add label
+         <template #symbol>+</template>
+      </AppButton>
+   </div>
    <div class="label-creator__form" v-if="isCreating">
       <input type="text" placeholder="Enter Label Name" v-model="label" />
       <div class="label-creator__buttons">
-         <AppButton color="salmon" type="submit" @click="addLabel">Add Label</AppButton>
-         <AppButton color="lightblue" @click="cancel" type="cancel">
+         <AppButton color="#fff" bg-color="salmon" type="submit" @click="addLabel">Add Label</AppButton>
+         <AppButton color="#fff" bg-color="lightblue" @click="cancel" type="cancel">
             <template #symbol>
-               <font-awesome-icon icon="xmark" />
+               <fa-icon icon="xmark" />
             </template>
          </AppButton>
       </div>
@@ -134,30 +139,14 @@ const cancel = () => {
    display: none;
 }
 
-.content__button {
-   color: #fff;
-   padding: 0.7rem 2rem;
-   background-color: rgb(90, 90, 90);
-   border-radius: 1rem;
-   transition: 0.3s ease;
-   margin-bottom: 3rem;
-}
-
-.content__button:hover {
-   transform: translateY(-0.2rem);
-   background-color: #000;
-   box-shadow: rgb(0 0 0 / 26%) 0px 3px 6px, rgb(0 0 0 / 6%) 0px 6px 9px;
-}
-
-.content__button span {
-   font-size: 2rem;
-   margin-left: 1rem;
-   margin-top: -0.25rem;
+.content__button-container {
+   width: 25rem;
+   margin-bottom: 2rem;
 }
 
 .label-creator__form {
    width: 25rem;
-   margin-bottom: 1rem;
+   margin-bottom: 2rem;
 }
 
 .label-creator__form input {

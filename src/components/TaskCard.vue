@@ -6,23 +6,23 @@
     <div class="card__top">
       <h2 class="card__theme theme">Urgent</h2>
       <div class="card__dropdown">
-        <font-awesome-icon class="fa-ellipsis" icon="ellipsis" />
+        <fa-icon class="fa-ellipsis" icon="ellipsis" />
       </div>
     </div>
     <h3 class="card__title">Task 1</h3>
     <div class="card__desc">
-      <font-awesome-icon class="card__desc-icon" icon="bars-staggered" />
+      <fa-icon class="card__desc-icon" icon="bars-staggered" />
     </div>
     <div class="card__details details">
       <div class="details-content">
         <div class="details-content__icon">
-          <font-awesome-icon class="fa-details" icon="clock" />
+          <fa-icon class="fa-details" icon="clock" />
         </div>
         <p class="details-content__text">5 May</p>
       </div>
       <div class="details-content">
         <div class="details-content__icon">
-          <font-awesome-icon class="fa-details" icon="calendar-check" />
+          <fa-icon class="fa-details" icon="calendar-check" />
         </div>
         <p class="details-content__text">3/3</p>
       </div>

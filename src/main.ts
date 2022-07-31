@@ -15,16 +15,17 @@ import {
    faCircleCheck,
    faTrashCan,
    faTag,
-   faXmark
+   faXmark,
+   faPlus
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faEllipsis, faClock, faCalendarCheck, faT, faBarsStaggered, faCalendarDays, faCircleCheck, faTrashCan, faTag, faXmark)
+library.add(faEllipsis, faClock, faCalendarCheck, faT, faBarsStaggered, faCalendarDays, faCircleCheck, faTrashCan, faTag, faXmark, faPlus)
 
 const trelloApp = createApp(App)
 
 trelloApp
-   .component('font-awesome-icon', FontAwesomeIcon)
+   .component('fa-icon', FontAwesomeIcon)
    .use(router)
    .use(scrollLock)
    .use(createPinia())

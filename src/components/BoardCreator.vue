@@ -21,19 +21,20 @@ const cancel = (): void => {
 
 <template>
   <div class="board-creator">
-    <AppButton v-if="!isCreating" @click="isCreating = true">Add Board
+    <AppButton v-if="!isCreating" @click="isCreating = true">
+      Add Board
     </AppButton>
-    <form class="board-creator__form" v-if="isCreating" @submit.prevent="submit">
+    <div class="board-creator__form" v-if="isCreating">
       <input type="text" placeholder="Enter Board Name" v-model="boardStatus" />
       <div class="board-creator__buttons">
-        <AppButton color="salmon" type="submit">Add Board</AppButton>
-        <AppButton color="lightblue" @click="cancel" type="cancel">
+        <AppButton bg-color="salmon" color="#fff" @click="submit">Add Board</AppButton>
+        <AppButton bg-color="lightblue" color="#fff" @click="cancel">
           <template #symbol>
-            <font-awesome-icon icon="xmark" />
+            <fa-icon icon="xmark" />
           </template>
         </AppButton>
       </div>
-    </form>
+    </div>
   </div>
 </template>
 

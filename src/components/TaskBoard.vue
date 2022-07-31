@@ -29,7 +29,7 @@ const cards = computed(() => {
         <span>{{ props.board.cardsAmount }}</span>
       </div>
       <div class="top-board__dropdown">
-        <font-awesome-icon icon="ellipsis" />
+        <fa-icon icon="ellipsis" />
       </div>
     </div>
     <div class="board__inner inner-board">
