@@ -9,8 +9,16 @@ export const useCardStore = defineStore('cards', {
    actions: {
       addCard(card: CardInfo) {
          const cardObj = { ...card }
-         cardObj.date = dateFormatter(card.date)
+         if (cardObj.date) {
+            cardObj.date = dateFormatter(card.date)
+         }
          this.cards.push(cardObj)
+      },
+      removeCard(cardId: string) {
+         this.cards = this.cards.filter(card => card.id !== cardId)
+      },
+      removeCardsFromBoard(boardId: string) {
+         this.cards = this.cards.filter(card => card.boardId !== boardId)
       }
    }
 })

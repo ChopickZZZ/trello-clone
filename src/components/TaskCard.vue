@@ -1,10 +1,24 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import AppDropDown from './AppDropDown.vue';
+import { ref, computed } from 'vue';
+import { useCardStore } from '../stores/cards';
 import { CardInfo } from '../types';
 
 const props = defineProps<{
   card: CardInfo
 }>()
+
+const emit = defineEmits<{
+  (event: 'remove-card', cardId: string): void
+}>()
+
+const cardStore = useCardStore()
+
+const isDropDownOpen = ref(false)
+const cardRemove = (): void => {
+  cardStore.removeCard(props.card.id)
+  emit('remove-card', props.card.id)
+}
 
 const tasksDone = computed(() => props.card.tasks?.filter(task => task.isDone === true))
 
@@ -18,9 +32,11 @@ const tasksDone = computed(() => props.card.tasks?.filter(task => task.isDone ==
           {{ label.text }}
         </li>
       </ul>
-      <div class="card__dropdown">
+      <button class="card__dropdown" @click="isDropDownOpen = !isDropDownOpen">
         <fa-icon class="fa-ellipsis" icon="ellipsis" />
-      </div>
+      </button>
+      <AppDropDown element="card" v-if="isDropDownOpen" @remove-element="cardRemove"
+        style="top: 3.5rem; right: .5rem" />
     </div>
     <h3 class="card__title">{{ props.card.title }}</h3>
     <div class="card__desc" v-if="props.card.description">
@@ -45,6 +61,7 @@ const tasksDone = computed(() => props.card.tasks?.filter(task => task.isDone ==
 
 <style scoped>
 .card {
+  position: relative;
   padding: 0.9rem;
   border-radius: 0.5rem;
   background-color: #fff;

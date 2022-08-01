@@ -1,7 +1,7 @@
 export interface BoardInfo {
    id: string,
    status: string,
-   cardsAmount?: number
+   cards: string[]
 }
 
 export interface CardInfo {

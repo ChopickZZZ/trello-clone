@@ -4,10 +4,11 @@ import ModalLabels from '../components/ModalLabels.vue';
 import ModalTasks from '../components/ModalTasks.vue';
 import { reactive, computed } from 'vue';
 import { CardInfo, Task, Label } from '../types';
-import { useCardStore } from '../stores/tasks';
+import { useCardStore } from '../stores/cards';
 
 const emit = defineEmits<{
-  (event: 'modal-close'): void
+  (event: 'modal-close'): void,
+  (event: 'add-card', cardId: string): void
 }>()
 
 interface ModalProps {
@@ -32,6 +33,7 @@ const cardStore = useCardStore()
 const add = () => {
   cardStore.addCard(card)
   emit('modal-close')
+  emit('add-card', card.id)
 }
 
 </script>

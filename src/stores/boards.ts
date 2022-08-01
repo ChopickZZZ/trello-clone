@@ -9,17 +9,31 @@ export const useBoardStore = defineStore('boards', {
       boardsAmount: state => state.boards.length
    },
    actions: {
-      addBoard({ status }: BoardInfo) {
-         const cardsAmount = 0
+      addBoard({ status }: { status: string }) {
          const id = 'b' + Math.random()
-         const board = {
+
+         const boardObj = {
             id,
             status,
-            cardsAmount
-         }
+            cards: []
+         } as BoardInfo
 
-         this.boards.push(board)
-         console.log(this.boards)
+         this.boards.push(boardObj)
+      },
+      removeBoard(boardId: string) {
+         this.boards = this.boards.filter(board => board.id !== boardId)
+      },
+      addCardsCount(boardId: string, cardId: string) {
+         const board = this.boards.find(board => board.id === boardId)
+         if (board) {
+            board.cards.push(cardId)
+         }
+      },
+      decreaseCardsCount(boardId: string, cardId: string) {
+         const board = this.boards.find(board => board.id === boardId)
+         if (board) {
+            board.cards = board.cards.filter(id => id !== cardId)
+         }
       }
    }
 })

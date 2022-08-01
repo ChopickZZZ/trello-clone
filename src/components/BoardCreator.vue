@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { reactive, ref } from "vue";
 import { useBoardStore } from "../stores/boards";
+import { BoardInfo } from "../types";
 import AppButton from "./AppButton.vue";
 import AppInput from "./AppInput.vue";
 

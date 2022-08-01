@@ -2,8 +2,10 @@
 import TaskCard from "./TaskCard.vue";
 import AppButton from "./AppButton.vue";
 import AppModal from "../ui/AppModal.vue";
+import AppDropDown from "./AppDropDown.vue";
 import { BoardInfo } from '../types'
-import { useCardStore } from "../stores/tasks";
+import { useCardStore } from "../stores/cards";
+import { useBoardStore } from "../stores/boards";
 import { ref, computed } from "vue";
 
 interface Props {
@@ -11,12 +13,22 @@ interface Props {
 }
 const props = defineProps<Props>()
 
-const isOpen = ref(false)
-
+const isModalOpen = ref(false)
+const isDropDownOpen = ref(false)
+const boardStore = useBoardStore()
 const cardStore = useCardStore()
+
+const boardRemove = () => {
+  boardStore.removeBoard(props.board.id)
+  cardStore.removeCardsFromBoard(props.board.id)
+}
+
 const cards = computed(() => {
   return cardStore.cards.filter(card => card.boardId === props.board.id)
 })
+
+const cardAdd = (cardId: string) => boardStore.addCardsCount(props.board.id, cardId)
+const cardRemove = (cardId: string) => boardStore.decreaseCardsCount(props.board.id, cardId)
 
 </script>
 
@@ -25,17 +37,19 @@ const cards = computed(() => {
     <div class="board__top top-board">
       <div class="top-board__status">
         {{ props.board.status }}
-        <span>{{ props.board.cardsAmount }}</span>
+        <span>{{ props.board.cards.length }}</span>
       </div>
-      <div class="top-board__dropdown">
+      <button class="top-board__dropdown" @click="isDropDownOpen = !isDropDownOpen">
         <fa-icon icon="ellipsis" />
-      </div>
+      </button>
+      <AppDropDown element="board" v-if="isDropDownOpen" @remove-element="boardRemove" />
     </div>
     <div class="board__inner inner-board">
-      <TaskCard v-for="card in cards" :key="card.id" :card="card" />
-      <AppButton @click="isOpen = true">Add Card</AppButton>
+      <TaskCard v-for="card in cards" :key="card.id" :card="card" @remove-card="cardRemove" />
+      <AppButton @click="isModalOpen = true">Add Card</AppButton>
       <teleport to="#app">
-        <AppModal v-if="isOpen" v-lock @modal-close="isOpen = false" :board-id="props.board.id" />
+        <AppModal v-if="isModalOpen" v-lock @modal-close="isModalOpen = false" @add-card="cardAdd"
+          :board-id="props.board.id" />
       </teleport>
     </div>
   </div>
@@ -43,6 +57,7 @@ const cards = computed(() => {
 
 <style scoped>
 .board {
+  position: relative;
   width: 35rem;
   background-color: rgba(255, 255, 255, 0.25);
   backdrop-filter: blur(5px);
@@ -65,6 +80,7 @@ const cards = computed(() => {
 }
 
 .top-board__dropdown {
+  font-size: 1.8rem;
   cursor: pointer;
 }
 
