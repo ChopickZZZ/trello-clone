@@ -2,7 +2,8 @@
 import AppDropDown from './AppDropDown.vue';
 import { ref, computed } from 'vue';
 import { useCardStore } from '../stores/cards';
-import { CardInfo } from '../types';
+import { CardInfo, Task } from '../types';
+import { dateFormatter } from '../use/date';
 
 const props = defineProps<{
   card: CardInfo
@@ -13,14 +14,20 @@ const emit = defineEmits<{
 }>()
 
 const cardStore = useCardStore()
-
 const isDropDownOpen = ref(false)
+
 const cardRemove = (): void => {
   cardStore.removeCard(props.card.id)
   emit('remove-card', props.card.id)
 }
 
-const tasksDone = computed(() => props.card.tasks?.filter(task => task.isDone === true))
+const tasksDoneAmount = computed((): number => {
+  if (props.card.tasks === undefined) {
+    throw new TypeError(`No tasks found in card ${props.card.id}`);
+  }
+  const tasksDone = props.card.tasks.filter(task => task.isDone === true)
+  return tasksDone.length
+})
 
 </script>
 
@@ -47,13 +54,13 @@ const tasksDone = computed(() => props.card.tasks?.filter(task => task.isDone ==
         <div class="details-content__icon">
           <fa-icon class="fa-details" icon="clock" />
         </div>
-        <p class="details-content__text">{{ props.card.date }}</p>
+        <p class="details-content__text">{{ dateFormatter(props.card.date) }}</p>
       </div>
       <div class="details-content" v-if="props.card.tasks">
         <div class="details-content__icon">
           <fa-icon class="fa-details" icon="calendar-check" />
         </div>
-        <p class="details-content__text">{{ tasksDone?.length }} / {{ props.card.tasks?.length }}</p>
+        <p class="details-content__text">{{ tasksDoneAmount }} / {{ props.card.tasks.length }}</p>
       </div>
     </div>
   </div>
@@ -111,7 +118,7 @@ const tasksDone = computed(() => props.card.tasks?.filter(task => task.isDone ==
 
 .card__desc-icon {
   color: rgb(90, 90, 90);
-  transition: .3s ease;
+  transition: .35s ease;
 }
 
 .card__desc-icon:hover {
@@ -131,11 +138,25 @@ const tasksDone = computed(() => props.card.tasks?.filter(task => task.isDone ==
   background-color: rgb(235, 235, 235);
   border-radius: 2rem;
   gap: 0.5rem;
+  transition: gap .35s ease
+}
+
+.details-content:hover .fa-details {
+  color: #000;
+}
+
+.card:hover .details-content {
+  gap: 1.5rem
 }
 
 .fa-ellipsis {
   font-size: 2rem;
   color: rgb(90, 90, 90);
+  transition: color .35s ease;
+}
+
+.fa-ellipsis:hover {
+  color: #000;
 }
 
 .fa-plus {
@@ -146,5 +167,6 @@ const tasksDone = computed(() => props.card.tasks?.filter(task => task.isDone ==
 
 .fa-details {
   color: rgb(151, 151, 151);
+  transition: .35s ease;
 }
 </style>

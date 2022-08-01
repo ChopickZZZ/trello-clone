@@ -4,14 +4,21 @@ import AppInput from './AppInput.vue';
 import { Ref, ref } from 'vue';
 import { Label } from "../types"
 
+const props = defineProps<{
+   labels?: Label[]
+}>()
+
 const emit = defineEmits<{
-   (event: 'add', labels: Label[]): void
+   (event: 'change', labels: Label[]): void
 }>()
 
 const colors: string[] = ['salmon', 'lightblue', '#777', '#379906', '#99066f', '#8a0c0c', '#000', '#0c138a']
 const labelColor = ref('')
 
 let labels: Ref<Label[]> = ref([])
+if (props.labels?.length) {
+   labels.value = props.labels
+}
 
 const isCreating = ref(false)
 const addLabel = (inputText: string): void => {
@@ -23,11 +30,12 @@ const addLabel = (inputText: string): void => {
       isCreating.value = false
       labelColor.value = ''
    }
-   emit('add', labels.value)
+   emit('change', labels.value)
 }
 
 const removeLabel = (idx: number): void => {
    labels.value = labels.value.filter((_, index) => index !== idx)
+   emit('change', labels.value)
 }
 const cancel = (): void => {
    isCreating.value = false

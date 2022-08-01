@@ -1,15 +1,13 @@
 <script setup lang="ts">
-import { reactive, ref } from "vue";
+import { ref } from "vue";
 import { useBoardStore } from "../stores/boards";
-import { BoardInfo } from "../types";
 import AppButton from "./AppButton.vue";
 import AppInput from "./AppInput.vue";
-
 const isCreating = ref(false);
 const boardStore = useBoardStore();
 
 const boardAdd = (inputText: string): void => {
-  boardStore.addBoard({ status: inputText });
+  boardStore.addBoard(inputText);
   isCreating.value = false
 };
 

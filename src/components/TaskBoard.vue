@@ -3,7 +3,9 @@ import TaskCard from "./TaskCard.vue";
 import AppButton from "./AppButton.vue";
 import AppModal from "../ui/AppModal.vue";
 import AppDropDown from "./AppDropDown.vue";
-import { BoardInfo } from '../types'
+import CardCreator from "./CardCreator.vue";
+import CardEditor from "./CardEditor.vue";
+import { BoardInfo, CardInfo } from '../types'
 import { useCardStore } from "../stores/cards";
 import { useBoardStore } from "../stores/boards";
 import { ref, computed } from "vue";
@@ -12,23 +14,35 @@ interface Props {
   board: BoardInfo
 }
 const props = defineProps<Props>()
-
-const isModalOpen = ref(false)
-const isDropDownOpen = ref(false)
 const boardStore = useBoardStore()
 const cardStore = useCardStore()
 
-const boardRemove = () => {
+const isModalOpen = ref(false)
+const isDropDownOpen = ref(false)
+const isEditing = ref(false)
+const cardId = ref('')
+
+const boardRemove = (): void => {
   boardStore.removeBoard(props.board.id)
   cardStore.removeCardsFromBoard(props.board.id)
 }
 
-const cards = computed(() => {
+const cards = computed((): CardInfo[] => {
   return cardStore.cards.filter(card => card.boardId === props.board.id)
 })
 
-const cardAdd = (cardId: string) => boardStore.addCardsCount(props.board.id, cardId)
-const cardRemove = (cardId: string) => boardStore.decreaseCardsCount(props.board.id, cardId)
+const cardEdit = (id: string): void => {
+  isEditing.value = true
+  cardId.value = id
+  isModalOpen.value = !isModalOpen.value
+}
+
+const cardAdd = (cardId: string): void => boardStore.addCardsCount(props.board.id, cardId)
+const cardRemove = (cardId: string): void => boardStore.decreaseCardsCount(props.board.id, cardId)
+const modalToggle = (): void => {
+  isEditing.value = false
+  isModalOpen.value = !isModalOpen.value
+}
 
 </script>
 
@@ -45,11 +59,14 @@ const cardRemove = (cardId: string) => boardStore.decreaseCardsCount(props.board
       <AppDropDown element="board" v-if="isDropDownOpen" @remove-element="boardRemove" />
     </div>
     <div class="board__inner inner-board">
-      <TaskCard v-for="card in cards" :key="card.id" :card="card" @remove-card="cardRemove" />
+      <TaskCard v-for="card in cards" :key="card.id" :card="card" @remove-card="cardRemove"
+        @click="cardEdit(card.id)" />
       <AppButton @click="isModalOpen = true">Add Card</AppButton>
       <teleport to="#app">
-        <AppModal v-if="isModalOpen" v-lock @modal-close="isModalOpen = false" @add-card="cardAdd"
-          :board-id="props.board.id" />
+        <AppModal v-if="isModalOpen" v-lock @modal-close="modalToggle">
+          <CardEditor v-if="isEditing" :card-id="cardId" @modal-close="modalToggle" />
+          <CardCreator :board-id="props.board.id" @add-card="cardAdd" @modal-close="isModalOpen = false" v-else />
+        </AppModal>
       </teleport>
     </div>
   </div>

@@ -9,15 +9,13 @@ export const useBoardStore = defineStore('boards', {
       boardsAmount: state => state.boards.length
    },
    actions: {
-      addBoard({ status }: { status: string }) {
+      addBoard(status: string) {
          const id = 'b' + Math.random()
-
          const boardObj = {
             id,
             status,
             cards: []
          } as BoardInfo
-
          this.boards.push(boardObj)
       },
       removeBoard(boardId: string) {

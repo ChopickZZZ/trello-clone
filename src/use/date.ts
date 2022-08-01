@@ -3,7 +3,7 @@ export function dateFormatter(date: string): string {
 
    let [_, month, day] = date.split('-')
 
-   if (date.indexOf('0') !== -1) {
+   if (day.indexOf('0') !== -1) {
       day = day.slice(1)
    }
 

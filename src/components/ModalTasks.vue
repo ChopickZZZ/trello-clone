@@ -4,12 +4,19 @@ import AppInput from './AppInput.vue';
 import { ref, Ref, computed } from 'vue'
 import { Task } from '../types'
 
+const props = defineProps<{
+   tasks?: Task[]
+}>()
+
 const emit = defineEmits<{
-   (event: 'add', tasks: Task[]): void
+   (event: 'change', tasks: Task[]): void
 }>()
 
 const isCreating = ref(false)
 const tasks: Ref<Task[]> = ref([])
+if (props.tasks?.length) {
+   tasks.value = props.tasks
+}
 
 const createTask = (inputValue: string): void => {
    tasks.value.push({
@@ -17,14 +24,15 @@ const createTask = (inputValue: string): void => {
       isDone: false
    })
    isCreating.value = false
-   emit('add', tasks.value)
+   emit('change', tasks.value)
 }
 
 const removeTask = (idx: number): void => {
    tasks.value = tasks.value.filter((_, index) => index !== idx)
+   emit('change', tasks.value)
 }
 
-const progressLength = computed(() => {
+const progressLength = computed((): number => {
    const endedTasks = tasks.value.filter(task => task.isDone === true)
    return endedTasks.length / tasks.value.length * 100
 })
@@ -89,6 +97,7 @@ const cancel = (): void => {
    top: 0;
    left: 0;
    background-color: rgb(6, 125, 165);
+   transition: .3s ease;
 }
 
 .content__checkbox {
