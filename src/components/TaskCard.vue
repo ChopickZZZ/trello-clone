@@ -2,7 +2,7 @@
 import AppDropDown from './AppDropDown.vue';
 import { ref, computed } from 'vue';
 import { useCardStore } from '../stores/cards';
-import { CardInfo, Task } from '../types';
+import { CardInfo } from '../types';
 import { dateFormatter } from '../use/date';
 
 const props = defineProps<{
@@ -29,6 +29,11 @@ const tasksDoneAmount = computed((): number => {
   return tasksDone.length
 })
 
+const openDropDown = (event: Event) => {
+  event.stopPropagation()
+  isDropDownOpen.value = !isDropDownOpen.value
+}
+
 </script>
 
 <template>
@@ -39,10 +44,10 @@ const tasksDoneAmount = computed((): number => {
           {{ label.text }}
         </li>
       </ul>
-      <button class="card__dropdown" @click="isDropDownOpen = !isDropDownOpen">
+      <button class="card__dropdown" @click="openDropDown($event)">
         <fa-icon class="fa-ellipsis" icon="ellipsis" />
       </button>
-      <AppDropDown element="card" v-if="isDropDownOpen" @remove-element="cardRemove"
+      <AppDropDown element="card" v-if="isDropDownOpen" @remove-element="cardRemove()"
         style="top: 3.5rem; right: .5rem" />
     </div>
     <h3 class="card__title">{{ props.card.title }}</h3>

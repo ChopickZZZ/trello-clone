@@ -5,11 +5,15 @@ const props = defineProps<{
 const emit = defineEmits<{
    (event: 'remove-element'): void
 }>()
+const buttonHandler = (event: Event): void => {
+   event.stopPropagation()
+   emit('remove-element')
+}
 </script>
 
 <template>
    <div class="drop-down">
-      <button @click="emit('remove-element')">Delete {{ props.element }}</button>
+      <button @click="buttonHandler">Delete {{ props.element }}</button>
    </div>
 </template>
 

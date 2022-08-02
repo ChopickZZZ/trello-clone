@@ -1,5 +1,5 @@
 export interface BoardInfo {
-   id: string,
+   id?: string
    status: string,
    cards: string[]
 }

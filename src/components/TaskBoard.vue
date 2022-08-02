@@ -38,7 +38,10 @@ const cardEdit = (id: string): void => {
 }
 
 const cardAdd = (cardId: string): void => boardStore.addCardsCount(props.board.id, cardId)
-const cardRemove = (cardId: string): void => boardStore.decreaseCardsCount(props.board.id, cardId)
+const cardRemove = (cardId: string): void => {
+  boardStore.decreaseCardsCount(props.board.id, cardId)
+  isEditing.value = false
+}
 const modalToggle = (): void => {
   isEditing.value = false
   isModalOpen.value = !isModalOpen.value

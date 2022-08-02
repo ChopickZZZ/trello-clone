@@ -1,15 +1,20 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import { useBoardStore } from "../stores/boards";
+import { BoardInfo } from "../types";
 import TaskBoard from "../components/TaskBoard.vue";
 import BoardCreator from "../components/BoardCreator.vue";
 
 const boardStore = useBoardStore()
+await boardStore.fetchBoards()
+
+const boards = computed((): BoardInfo[] => boardStore.boards)
 </script>
 
 <template>
   <div class="container" style="margin-top: 5rem">
     <div class="board-container">
-      <TaskBoard v-for="board in boardStore.boards" :key="board.id" :board="board" />
+      <TaskBoard v-for="board in boards" :key="board.id" :board="board" />
       <BoardCreator />
     </div>
   </div>

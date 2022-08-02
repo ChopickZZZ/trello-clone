@@ -1,25 +1,45 @@
 import { defineStore } from "pinia";
 import { BoardInfo } from '../types'
+import { db } from "../firebase";
+import { collection, getDocs } from "firebase/firestore";
 
 export const useBoardStore = defineStore('boards', {
    state: () => ({
       boards: [] as BoardInfo[]
    }),
    getters: {
-      boardsAmount: state => state.boards.length
+      boardsAmount: state => state.boards.length,
+      getBoards: state => state.boards
    },
    actions: {
-      addBoard(status: string) {
-         const id = 'b' + Math.random()
-         const boardObj = {
-            id,
+      async addBoard(status: string) {
+         const board = {
             status,
             cards: []
          } as BoardInfo
-         this.boards.push(boardObj)
+
+         const batch = db.batch()
+         const boardRef = db.collection('boards').doc()
+         this.boards.push({ ...board, id: boardRef.id })
+
+         batch.set(boardRef, board)
+         await batch.commit()
       },
-      removeBoard(boardId: string) {
+      async removeBoard(boardId: string) {
+         const batch = db.batch()
+         const boardRef = db.collection('boards').doc(boardId)
+
          this.boards = this.boards.filter(board => board.id !== boardId)
+
+         batch.delete(boardRef)
+         await batch.commit()
+      },
+      async fetchBoards() {
+         const querySnapshot = await getDocs(collection(db, "boards"));
+         querySnapshot.forEach((doc) => {
+            const board = { ...doc.data() as BoardInfo, id: doc.id }
+            this.boards.push(board)
+         });
       },
       addCardsCount(boardId: string, cardId: string) {
          const board = this.boards.find(board => board.id === boardId)
