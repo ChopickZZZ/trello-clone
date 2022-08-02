@@ -8,11 +8,11 @@ export const useBoardStore = defineStore('boards', {
       boards: [] as BoardInfo[]
    }),
    getters: {
-      boardsAmount: state => state.boards.length,
-      getBoards: state => state.boards
+      boardsAmount: (state): number => state.boards.length,
+      getBoards: (state): BoardInfo[] => state.boards
    },
    actions: {
-      async addBoard(status: string) {
+      async addBoard(status: string): Promise<void> {
          const board = {
             status,
             cards: []
@@ -25,7 +25,7 @@ export const useBoardStore = defineStore('boards', {
          batch.set(boardRef, board)
          await batch.commit()
       },
-      async removeBoard(boardId: string) {
+      async removeBoard(boardId: string): Promise<void> {
          const batch = db.batch()
          const boardRef = db.collection('boards').doc(boardId)
 
@@ -34,20 +34,20 @@ export const useBoardStore = defineStore('boards', {
          batch.delete(boardRef)
          await batch.commit()
       },
-      async fetchBoards() {
+      async fetchBoards(): Promise<void> {
          const querySnapshot = await getDocs(collection(db, "boards"));
          querySnapshot.forEach((doc) => {
             const board = { ...doc.data() as BoardInfo, id: doc.id }
             this.boards.push(board)
          });
       },
-      addCardsCount(boardId: string, cardId: string) {
+      addCards(boardId: string, cardId: string) {
          const board = this.boards.find(board => board.id === boardId)
          if (board) {
             board.cards.push(cardId)
          }
       },
-      decreaseCardsCount(boardId: string, cardId: string) {
+      removeCards(boardId: string, cardId: string) {
          const board = this.boards.find(board => board.id === boardId)
          if (board) {
             board.cards = board.cards.filter(id => id !== cardId)

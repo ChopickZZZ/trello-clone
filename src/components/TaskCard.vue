@@ -9,17 +9,10 @@ const props = defineProps<{
   card: CardInfo
 }>()
 
-const emit = defineEmits<{
-  (event: 'remove-card', cardId: string): void
-}>()
-
 const cardStore = useCardStore()
 const isDropDownOpen = ref(false)
 
-const cardRemove = (): void => {
-  cardStore.removeCard(props.card.id)
-  emit('remove-card', props.card.id)
-}
+const cardRemove = (): Promise<void> => cardStore.removeCard(props.card.id!)
 
 const tasksDoneAmount = computed((): number => {
   if (props.card.tasks === undefined) {

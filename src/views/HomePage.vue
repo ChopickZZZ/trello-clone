@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useBoardStore } from "../stores/boards";
+import { useCardStore } from "../stores/cards";
 import { BoardInfo } from "../types";
 import TaskBoard from "../components/TaskBoard.vue";
 import BoardCreator from "../components/BoardCreator.vue";
 
 const boardStore = useBoardStore()
+const cardStore = useCardStore()
 await boardStore.fetchBoards()
+await cardStore.fetchCards()
 
 const boards = computed((): BoardInfo[] => boardStore.boards)
 </script>

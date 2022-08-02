@@ -19,7 +19,6 @@ const props = defineProps<ModalProps>()
 const cardStore = useCardStore()
 
 const card: CardInfo = reactive({
-   id: 'c' + Math.random(),
    title: '',
    description: '',
    date: '',
@@ -31,7 +30,6 @@ const addTasks = (actualTasks: Task[]): Task[] => card.tasks = actualTasks
 
 const add = () => {
    cardStore.addCard(card)
-   emit('add-card', card.id)
    emit('modal-close')
 }
 </script>

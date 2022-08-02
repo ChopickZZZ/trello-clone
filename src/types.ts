@@ -5,7 +5,7 @@ export interface BoardInfo {
 }
 
 export interface CardInfo {
-   id: string,
+   id?: string,
    title: string,
    description?: string,
    date: string,

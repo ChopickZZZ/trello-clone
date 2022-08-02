@@ -22,10 +22,7 @@ const isDropDownOpen = ref(false)
 const isEditing = ref(false)
 const cardId = ref('')
 
-const boardRemove = (): void => {
-  boardStore.removeBoard(props.board.id)
-  cardStore.removeCardsFromBoard(props.board.id)
-}
+const boardRemove = (): Promise<void> => boardStore.removeBoard(props.board.id!)
 
 const cards = computed((): CardInfo[] => {
   return cardStore.cards.filter(card => card.boardId === props.board.id)
@@ -37,11 +34,6 @@ const cardEdit = (id: string): void => {
   isModalOpen.value = !isModalOpen.value
 }
 
-const cardAdd = (cardId: string): void => boardStore.addCardsCount(props.board.id, cardId)
-const cardRemove = (cardId: string): void => {
-  boardStore.decreaseCardsCount(props.board.id, cardId)
-  isEditing.value = false
-}
 const modalToggle = (): void => {
   isEditing.value = false
   isModalOpen.value = !isModalOpen.value
@@ -62,13 +54,12 @@ const modalToggle = (): void => {
       <AppDropDown element="board" v-if="isDropDownOpen" @remove-element="boardRemove" />
     </div>
     <div class="board__inner inner-board">
-      <TaskCard v-for="card in cards" :key="card.id" :card="card" @remove-card="cardRemove"
-        @click="cardEdit(card.id)" />
+      <TaskCard v-for="card in cards" :key="card.id" :card="card" @click="cardEdit(card.id!)" />
       <AppButton @click="isModalOpen = true">Add Card</AppButton>
       <teleport to="#app">
         <AppModal v-if="isModalOpen" v-lock @modal-close="modalToggle">
           <CardEditor v-if="isEditing" :card-id="cardId" @modal-close="modalToggle" />
-          <CardCreator :board-id="props.board.id" @add-card="cardAdd" @modal-close="isModalOpen = false" v-else />
+          <CardCreator :board-id="props.board.id!" @modal-close="isModalOpen = false" v-else />
         </AppModal>
       </teleport>
     </div>
