@@ -1,5 +1,19 @@
 <script setup lang="ts">
+import { ref, computed } from 'vue';
+import { useUsersStore } from '../stores/users.js';
+import { useRouter } from 'vue-router';
+import AppDropDown from './AppDropDown.vue';
+const router = useRouter()
+const usersStore = useUsersStore()
 
+const isDropDownOpen = ref(false)
+const user = computed(() => usersStore.user)
+
+const logout = async (): Promise<void> => {
+   await usersStore.signOut()
+   isDropDownOpen.value = false
+   router.push({ name: 'Login' })
+}
 </script>
 
 <template>
@@ -31,15 +45,18 @@
          </svg>
       </router-link>
       <nav class="navbar">
-         <div class="navbar__user user">
+         <a class="navbar__user user" v-if="user" @click.prevent="isDropDownOpen = !isDropDownOpen">
             <div class="user__info">
                <div class="user__avatar-container">
-                  <img class="user__avatar" src="../assets/images/avatar-test.jpg" alt="Test avatar">
+                  <img class="user__avatar" :src="user.avatar" :alt="`${user} Avatar`">
                </div>
-               <span class="user__name">Albert Karimov</span>
+               <span class="user__name">{{ user.username }}</span>
             </div>
-            <div class="user__dropdown"></div>
-         </div>
+            <button class="user__dropdown">
+               <fa-icon icon="caret-down" />
+            </button>
+            <AppDropDown @handler="logout" style="width: 20rem; top: 6.3rem;" v-if="isDropDownOpen">LogOut</AppDropDown>
+         </a>
       </nav>
    </header>
 </template>
@@ -64,6 +81,9 @@
 
 .navbar__user {
    margin-left: auto;
+   display: flex;
+   align-items: center;
+   cursor: pointer;
 }
 
 .user__info {
@@ -82,10 +102,16 @@
 .user__avatar {
    width: 100%;
    height: 100%;
+   object-fit: cover;
 }
 
 .user__name {
    font-weight: 700;
    font-size: 1.7rem;
+}
+
+.user__dropdown {
+   font-size: 1.8rem;
+   margin-left: 1rem;
 }
 </style>

@@ -23,3 +23,25 @@ export interface Task {
    text: string,
    isDone: boolean
 }
+
+export interface User {
+   name: string,
+   username: string,
+   email: string,
+   password: string,
+   avatar: string
+}
+
+export interface UserToFirestore {
+   id: string
+   name: string,
+   username: string,
+   email: string,
+   avatar: string | null,
+   usernameLower?: string
+}
+
+export interface AuthForm {
+   email: '',
+   password: ''
+}

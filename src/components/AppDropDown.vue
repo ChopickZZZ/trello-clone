@@ -1,19 +1,18 @@
 <script setup lang="ts">
-const props = defineProps<{
-   element: string
-}>()
 const emit = defineEmits<{
-   (event: 'remove-element'): void
+   (event: 'handler'): void
 }>()
 const buttonHandler = (event: Event): void => {
    event.stopPropagation()
-   emit('remove-element')
+   emit('handler')
 }
 </script>
 
 <template>
    <div class="drop-down">
-      <button @click="buttonHandler">Delete {{ props.element }}</button>
+      <button @click="buttonHandler">
+         <slot />
+      </button>
    </div>
 </template>
 

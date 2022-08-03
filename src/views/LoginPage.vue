@@ -1,19 +1,32 @@
 <script setup lang="ts">
-
+import { reactive } from 'vue';
+import { AuthForm } from '../types'
+import { useUsersStore } from '../stores/users.js';
+import { useRouter } from 'vue-router';
+const router = useRouter()
+const usersStore = useUsersStore()
+const form: AuthForm = reactive({
+   email: '',
+   password: ''
+})
+const signIn = async (): Promise<void> => {
+   await usersStore.signInWithEmailAndPassword({ ...form })
+   router.push({ name: 'Home' })
+}
 </script>
 
 <template>
    <div class="auth">
       <div class="auth-container">
-         <form class="auth-main">
+         <form class="auth-main" @submit.prevent="signIn">
             <h1 class="auth-main__title">LogIn</h1>
             <div class="auth-main__form-control">
                <label for="email">Email</label>
-               <input type="email" id="email" />
+               <input type="email" id="email" v-model="form.email" />
             </div>
             <div class="auth-main__form-control">
                <label for="password">Password</label>
-               <input type="password" id="password" />
+               <input type="password" id="password" v-model="form.password" />
             </div>
             <h2 class="auth__redirect">
                Don`t have an account yet? <router-link :to="{ name: 'Register' }">Register</router-link>

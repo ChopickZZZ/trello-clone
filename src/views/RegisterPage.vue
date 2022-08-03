@@ -1,36 +1,59 @@
 <script setup lang="ts">
+import { reactive, ref } from 'vue'
+import { User } from '../types';
+import { useUsersStore } from '../stores/users'
+import { useRouter } from 'vue-router';
+
+const router = useRouter()
+const usersStore = useUsersStore()
+const user: User = reactive({
+  name: '',
+  username: '',
+  password: '',
+  email: '',
+  avatar: ''
+})
+
+const isInProcess = ref(false)
+
+const addUser = async (): Promise<void> => {
+  isInProcess.value = true
+  await usersStore.registerWithEmailAndPassword(user)
+  router.push({ name: 'Home' })
+}
 
 </script>
 
 <template>
   <div class="auth">
     <div class="auth-container">
-      <form class="auth-main">
+      <form class="auth-main" @submit.prevent="addUser">
         <h1 class="auth-main__title">Register</h1>
         <div class="auth-main__form-control">
           <label for="name">Name</label>
-          <input type="text" id="name" />
+          <input type="text" id="name" v-model="user.name" />
         </div>
         <div class="auth-main__form-control">
           <label for="username">Username</label>
-          <input type="text" id="username" />
+          <input type="text" id="username" v-model="user.username" />
         </div>
         <div class="auth-main__form-control">
           <label for="email">Email</label>
-          <input type="email" id="email" />
+          <input type="email" id="email" v-model="user.email" />
         </div>
         <div class="auth-main__form-control">
           <label for="password">Password</label>
-          <input type="password" id="password" />
+          <input type="password" id="password" v-model="user.password" />
         </div>
         <div class="auth-main__form-control">
           <label for="avatar">Avatar</label>
-          <input type="text" id="avatar" />
+          <input type="text" id="avatar" v-model="user.avatar" />
         </div>
         <h2 class="auth__redirect">
           Already have an account? <router-link :to="{ name: 'Login' }">LogIn</router-link>
         </h2>
-        <button class="auth__button">Register</button>
+        <button :class="['auth__button', { process: isInProcess }]">{{ isInProcess ? 'Loading...' : 'Register'
+        }}</button>
       </form>
       <div class="auth__google-container">
         <button class="auth-google__button">Sign up with Google</button>
@@ -102,6 +125,11 @@
 
 .auth__button:hover {
   background-color: rgb(202, 67, 52);
+}
+
+.auth__button.process,
+.auth__button:hover.process {
+  background-color: rgb(190, 96, 86);
 }
 
 .auth__redirect a {

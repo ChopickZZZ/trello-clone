@@ -4,6 +4,8 @@ import router from './router'
 import scrollLock from './plugins/scrollLock'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import { auth } from './firebase';
+import { useUsersStore } from './stores/users'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
    faEllipsis,
@@ -16,12 +18,18 @@ import {
    faTrashCan,
    faTag,
    faXmark,
-   faPlus
+   faPlus,
+   faCaretDown
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faEllipsis, faClock, faCalendarCheck, faT, faBarsStaggered, faCalendarDays, faCircleCheck, faTrashCan, faTag, faXmark, faPlus)
+library.add(faEllipsis, faClock, faCalendarCheck, faT, faBarsStaggered, faCalendarDays, faCircleCheck, faTrashCan, faTag, faXmark, faPlus, faCaretDown)
 
+auth.onAuthStateChanged(user => {
+   if (user) {
+      useUsersStore().fetchAuthUser()
+   }
+})
 const trelloApp = createApp(App)
 
 trelloApp

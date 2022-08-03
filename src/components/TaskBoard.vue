@@ -51,7 +51,7 @@ const modalToggle = (): void => {
       <button class="top-board__dropdown" @click="isDropDownOpen = !isDropDownOpen">
         <fa-icon icon="ellipsis" />
       </button>
-      <AppDropDown element="board" v-if="isDropDownOpen" @remove-element="boardRemove" />
+      <AppDropDown v-if="isDropDownOpen" @handler="boardRemove">Delete Board</AppDropDown>
     </div>
     <div class="board__inner inner-board">
       <TaskCard v-for="card in cards" :key="card.id" :card="card" @click="cardEdit(card.id!)" />

@@ -40,8 +40,8 @@ const openDropDown = (event: Event) => {
       <button class="card__dropdown" @click="openDropDown($event)">
         <fa-icon class="fa-ellipsis" icon="ellipsis" />
       </button>
-      <AppDropDown element="card" v-if="isDropDownOpen" @remove-element="cardRemove()"
-        style="top: 3.5rem; right: .5rem" />
+      <AppDropDown v-if="isDropDownOpen" @handler="cardRemove()" style="top: 3.5rem; right: .5rem">Delete Card
+      </AppDropDown>
     </div>
     <h3 class="card__title">{{ props.card.title }}</h3>
     <div class="card__desc" v-if="props.card.description">
