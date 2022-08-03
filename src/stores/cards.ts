@@ -27,11 +27,11 @@ export const useCardStore = defineStore('cards', {
          const boardStore = useBoardStore()
 
          this.cards.push({ ...card, id: cardRef.id })
-         boardStore.addCards(card.boardId, cardRef.id)
          batch.set(cardRef, card)
          batch.update(boardRef, {
             cards: firestore.FieldValue.arrayUnion(cardRef.id)
          })
+         boardStore.addCards(card.boardId, cardRef.id)
          await batch.commit()
       },
       async removeCard(cardId: string): Promise<void> {
@@ -53,6 +53,17 @@ export const useCardStore = defineStore('cards', {
          })
          await batch.commit()
       },
+      async editCard(card: CardInfo) {
+         const cardObj = { ...card }
+         const batch = db.batch()
+         const cardRef = db.collection('cards').doc(card.id)
+
+         const oldCardIndex = this.cards.findIndex(card => card.id === cardObj.id)
+         this.cards[oldCardIndex] = cardObj
+
+         batch.update(cardRef, { ...cardObj })
+         await batch.commit()
+      },
       async fetchCards(): Promise<void> {
          const querySnapshot = await getDocs(collection(db, "cards"));
          querySnapshot.forEach((doc) => {
@@ -60,13 +71,5 @@ export const useCardStore = defineStore('cards', {
             this.cards.push(card)
          });
       },
-      editCard(card: CardInfo) {
-         const cardObj = { ...card }
-         const oldCardIndex = this.cards.findIndex(card => card.id === cardObj.id)
-         this.cards[oldCardIndex] = cardObj
-      },
-      removeCardsFromBoard(boardId: string) {
-         this.cards = this.cards.filter(card => card.boardId !== boardId)
-      }
    }
 })

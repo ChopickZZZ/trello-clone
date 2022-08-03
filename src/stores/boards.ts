@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { useCardStore } from "./cards";
 import { BoardInfo } from '../types'
 import { db } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
@@ -15,7 +16,7 @@ export const useBoardStore = defineStore('boards', {
       async addBoard(status: string): Promise<void> {
          const board = {
             status,
-            cards: []
+            cards: [],
          } as BoardInfo
 
          const batch = db.batch()
@@ -26,9 +27,14 @@ export const useBoardStore = defineStore('boards', {
          await batch.commit()
       },
       async removeBoard(boardId: string): Promise<void> {
+         const cardStore = useCardStore()
          const batch = db.batch()
          const boardRef = db.collection('boards').doc(boardId)
 
+         const board = this.boards.find(board => board.id === boardId)
+         if (board) {
+            board.cards.forEach(card => cardStore.removeCard(card))
+         }
          this.boards = this.boards.filter(board => board.id !== boardId)
 
          batch.delete(boardRef)

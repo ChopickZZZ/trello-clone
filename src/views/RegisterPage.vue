@@ -1,51 +1,46 @@
+<script setup lang="ts">
+
+</script>
+
 <template>
-  <div class="register">
-    <div class="register-container">
-      <form class="register-main">
-        <h1 class="register-main__title">Register</h1>
-        <div class="register-main__form-control">
+  <div class="auth">
+    <div class="auth-container">
+      <form class="auth-main">
+        <h1 class="auth-main__title">Register</h1>
+        <div class="auth-main__form-control">
           <label for="name">Name</label>
           <input type="text" id="name" />
         </div>
-        <div class="register-main__form-control">
+        <div class="auth-main__form-control">
           <label for="username">Username</label>
           <input type="text" id="username" />
         </div>
-        <div class="register-main__form-control">
+        <div class="auth-main__form-control">
           <label for="email">Email</label>
           <input type="email" id="email" />
         </div>
-        <div class="register-main__form-control">
+        <div class="auth-main__form-control">
           <label for="password">Password</label>
           <input type="password" id="password" />
         </div>
-        <div class="register-main__form-control">
+        <div class="auth-main__form-control">
           <label for="avatar">Avatar</label>
           <input type="text" id="avatar" />
         </div>
-        <h2 class="register__redirect">
-          Already have an account? <a href="#">LogIn</a>
+        <h2 class="auth__redirect">
+          Already have an account? <router-link :to="{ name: 'Login' }">LogIn</router-link>
         </h2>
-        <button class="register__button">Register</button>
+        <button class="auth__button">Register</button>
       </form>
-      <div class="register__google-container">
-        <button class="register-google__button">Sign up with Google</button>
+      <div class="auth__google-container">
+        <button class="auth-google__button">Sign up with Google</button>
       </div>
     </div>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-
-export default defineComponent({
-  setup() {},
-});
-</script>
-
-
 <style scoped>
-.register {
+.auth {
   display: flex;
   justify-content: center;
   max-width: 130rem;
@@ -54,11 +49,11 @@ export default defineComponent({
   flex-wrap: wrap;
 }
 
-.register-container {
-  flex-basis: 48%;
+.auth-container {
+  flex-basis: 43%;
 }
 
-.register-main {
+.auth-main {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -69,24 +64,24 @@ export default defineComponent({
   border-radius: 0.3rem;
 }
 
-.register-main__title {
+.auth-main__title {
   text-align: center;
   font-size: 3.2rem;
   font-weight: 700;
   margin-bottom: 1rem;
 }
 
-.register-main__form-control {
+.auth-main__form-control {
   display: inline-block;
   width: 100%;
   margin-bottom: 1.2rem;
 }
 
-.register-main__form-control label {
+.auth-main__form-control label {
   margin-bottom: 0.5rem;
 }
 
-.register-main__form-control input {
+.auth-main__form-control input {
   padding: 0.5rem 1rem;
   min-height: 4rem;
   width: 100%;
@@ -94,7 +89,7 @@ export default defineComponent({
   border-radius: 0.3rem;
 }
 
-.register__button {
+.auth__button {
   margin-top: 1rem;
   font-size: 1.8rem;
   text-align: center;
@@ -105,16 +100,26 @@ export default defineComponent({
   transition: background 0.35s ease;
 }
 
-.register__button:hover {
+.auth__button:hover {
   background-color: rgb(202, 67, 52);
 }
 
-.register__google-container {
+.auth__redirect a {
+  font-weight: 700;
+  color: #263959;
+  transition: color .3s ease;
+}
+
+.auth__redirect a:hover {
+  color: #172744;
+}
+
+.auth__google-container {
   text-align: center;
   padding-top: 1.5rem;
 }
 
-.register-google__button {
+.auth-google__button {
   font-size: 1.5rem;
   padding: 1rem 2rem;
   color: #fff;
@@ -123,7 +128,7 @@ export default defineComponent({
   transition: background 0.35s ease;
 }
 
-.register-google__button:hover {
+.auth-google__button:hover {
   background-color: #172744;
 }
 </style>
