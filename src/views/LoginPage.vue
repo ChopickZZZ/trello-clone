@@ -1,16 +1,23 @@
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { ref, reactive } from 'vue';
 import { AuthForm } from '../types'
 import { useUsersStore } from '../stores/users.js';
 import { useRouter } from 'vue-router';
 const router = useRouter()
 const usersStore = useUsersStore()
+
+const isInProcess = ref(false)
 const form: AuthForm = reactive({
    email: '',
    password: ''
 })
 const signIn = async (): Promise<void> => {
+   isInProcess.value = true
    await usersStore.signInWithEmailAndPassword({ ...form })
+   router.push({ name: 'Home' })
+}
+const signInWithGoogle = async (): Promise<void> => {
+   await usersStore.signInWithGoogle()
    router.push({ name: 'Home' })
 }
 </script>
@@ -31,10 +38,12 @@ const signIn = async (): Promise<void> => {
             <h2 class="auth__redirect">
                Don`t have an account yet? <router-link :to="{ name: 'Register' }">Register</router-link>
             </h2>
-            <button class="auth__button">Log In</button>
+            <button :class="['auth__button', { process: isInProcess }]">
+               {{ isInProcess ? 'Loading...' : 'LogIn' }}
+            </button>
          </form>
          <div class="auth__google-container">
-            <button class="auth-google__button">Sign up with Google</button>
+            <button class="auth-google__button" @click="signInWithGoogle">Sign up with Google</button>
          </div>
       </div>
    </div>
@@ -103,6 +112,11 @@ const signIn = async (): Promise<void> => {
 
 .auth__button:hover {
    background-color: rgb(202, 67, 52);
+}
+
+.auth__button.process,
+.auth__button:hover.process {
+   background-color: rgb(190, 96, 86);
 }
 
 .auth__redirect a {

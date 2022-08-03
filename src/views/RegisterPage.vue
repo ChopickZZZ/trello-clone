@@ -16,9 +16,15 @@ const user: User = reactive({
 
 const isInProcess = ref(false)
 
-const addUser = async (): Promise<void> => {
+const register = async (): Promise<void> => {
   isInProcess.value = true
   await usersStore.registerWithEmailAndPassword(user)
+  router.push({ name: 'Home' })
+}
+
+const registerWithGoogle = async (): Promise<void> => {
+  isInProcess.value = true
+  await usersStore.signInWithGoogle()
   router.push({ name: 'Home' })
 }
 
@@ -27,7 +33,7 @@ const addUser = async (): Promise<void> => {
 <template>
   <div class="auth">
     <div class="auth-container">
-      <form class="auth-main" @submit.prevent="addUser">
+      <form class="auth-main" @submit.prevent="register">
         <h1 class="auth-main__title">Register</h1>
         <div class="auth-main__form-control">
           <label for="name">Name</label>
@@ -56,7 +62,7 @@ const addUser = async (): Promise<void> => {
         }}</button>
       </form>
       <div class="auth__google-container">
-        <button class="auth-google__button">Sign up with Google</button>
+        <button class="auth-google__button" @click="registerWithGoogle">Sign up with Google</button>
       </div>
     </div>
   </div>

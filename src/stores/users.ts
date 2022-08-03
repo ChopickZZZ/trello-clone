@@ -20,6 +20,19 @@ export const useUsersStore = defineStore('users', {
       async signInWithEmailAndPassword({ email, password }: AuthForm) {
          return auth.signInWithEmailAndPassword(email, password)
       },
+      async signInWithGoogle() {
+         const provider = new authInstance.GoogleAuthProvider()
+         const response = await auth.signInWithPopup(provider)
+         const user = response.user
+         if (!user) {
+            throw TypeError('Google authentication failed')
+         }
+         const userRef = db.collection('users').doc(user.uid)
+         const userDoc = await userRef.get()
+         if (!userDoc.exists) {
+            await this.createUser({ id: user.uid, name: user.displayName!, email: user.email!, username: user.email!, avatar: user.photoURL })
+         }
+      },
       async signOut() {
          await auth.signOut()
          this.authId = this.user = null
