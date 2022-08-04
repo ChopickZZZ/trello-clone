@@ -55,7 +55,7 @@ const logout = async (): Promise<void> => {
             <button class="user__dropdown">
                <fa-icon icon="caret-down" />
             </button>
-            <AppDropDown @handler="logout" style="width: 20rem; top: 6.3rem;" v-if="isDropDownOpen">LogOut</AppDropDown>
+            <AppDropDown @handler="logout" style="width: 20rem; top: 6.2rem;" v-if="isDropDownOpen">LogOut</AppDropDown>
          </a>
       </nav>
    </header>
@@ -86,6 +86,15 @@ const logout = async (): Promise<void> => {
    cursor: pointer;
 }
 
+.navbar__user:hover .user__name,
+.navbar__user:hover .user__dropdown {
+   color: salmon
+}
+
+.navbar__user:hover .user__dropdown {
+   transform: rotate(-180deg);
+}
+
 .user__info {
    display: flex;
    align-items: center;
@@ -108,10 +117,12 @@ const logout = async (): Promise<void> => {
 .user__name {
    font-weight: 700;
    font-size: 1.7rem;
+   transition: color .4s ease;
 }
 
 .user__dropdown {
    font-size: 1.8rem;
    margin-left: 1rem;
+   transition: .4s ease;
 }
 </style>

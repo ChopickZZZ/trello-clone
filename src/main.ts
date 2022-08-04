@@ -2,6 +2,7 @@ import './style.css'
 import App from './App.vue'
 import router from './router'
 import scrollLock from './plugins/scrollLock'
+import focus from './plugins/focus'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { auth } from './firebase';
@@ -36,6 +37,7 @@ trelloApp
    .component('fa-icon', FontAwesomeIcon)
    .use(router)
    .use(scrollLock)
+   .use(focus)
    .use(createPinia())
 
 trelloApp.mount('#app')
