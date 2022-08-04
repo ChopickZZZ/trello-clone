@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { ref, computed } from "vue";
 import { useBoardStore } from "../stores/boards";
 import { useCardStore } from "../stores/cards";
 import { useUsersStore } from "../stores/users";
@@ -7,18 +7,21 @@ import { BoardInfo } from "../types";
 import TaskBoard from "../components/TaskBoard.vue";
 import BoardCreator from "../components/BoardCreator.vue";
 
+const isReady = ref(false)
+
 const boardStore = useBoardStore()
 const cardStore = useCardStore()
 const usersStore = useUsersStore()
-await boardStore.fetchBoards()
 await cardStore.fetchCards()
+await boardStore.fetchBoards()
 await usersStore.fetchUser()
+isReady.value = true
 
 const boards = computed((): BoardInfo[] => boardStore.boards)
 </script>
 
 <template>
-  <div class="container" style="margin-top: 5rem">
+  <div class="container" style="margin-top: 5rem" v-if="isReady">
     <div class="board-container">
       <TaskBoard v-for="board in boards" :key="board.id" :board="board" />
       <BoardCreator />

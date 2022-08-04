@@ -2,6 +2,7 @@ export interface BoardInfo {
    id?: string
    status: string,
    cards: string[],
+   userId: string
 }
 
 export interface CardInfo {
@@ -11,7 +12,8 @@ export interface CardInfo {
    date: string,
    labels?: Label[],
    tasks?: Task[]
-   boardId: string
+   boardId: string,
+   userId: string
 }
 
 export interface Label {

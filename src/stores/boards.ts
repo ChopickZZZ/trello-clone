@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { useCardStore } from "./cards";
+import { useUsersStore } from "./users";
 import { BoardInfo } from '../types'
 import { db } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
@@ -14,9 +15,11 @@ export const useBoardStore = defineStore('boards', {
    },
    actions: {
       async addBoard(status: string): Promise<void> {
+         const usersStore = useUsersStore()
          const board = {
             status,
             cards: [],
+            userId: usersStore.authId
          } as BoardInfo
 
          const batch = db.batch()
@@ -44,8 +47,13 @@ export const useBoardStore = defineStore('boards', {
          const querySnapshot = await getDocs(collection(db, "boards"));
          querySnapshot.forEach((doc) => {
             const board = { ...doc.data() as BoardInfo, id: doc.id }
-            this.boards.push(board)
+            if (board.userId === useUsersStore().authId) {
+               this.boards.push(board)
+            }
          });
+      },
+      removeAllBoards() {
+         this.boards.length = 0
       },
       addCards(boardId: string, cardId: string) {
          const board = this.boards.find(board => board.id === boardId)

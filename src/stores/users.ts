@@ -1,4 +1,6 @@
 import { defineStore } from "pinia";
+import { useBoardStore } from "./boards";
+import { useCardStore } from "./cards";
 import { docToResource } from "../helpers";
 import { AuthForm, User, UserToFirestore } from "../types";
 import { db, auth, authInstance } from '../firebase';
@@ -14,7 +16,6 @@ export const useUsersStore = defineStore('users', {
          const result = await auth.createUserWithEmailAndPassword(email, password)
          if (result.user?.uid) {
             await this.createUser({ id: result.user?.uid, name, username, email, avatar })
-            this.fetchAuthUser()
          }
       },
       async signInWithEmailAndPassword({ email, password }: AuthForm) {
@@ -36,6 +37,8 @@ export const useUsersStore = defineStore('users', {
       async signOut() {
          await auth.signOut()
          this.authId = this.user = null
+         useBoardStore().removeAllBoards()
+         useCardStore().removeAllCards()
       },
       async createUser({ id, name, username, email, avatar = null }: UserToFirestore) {
          const usernameLower = username.toLowerCase()

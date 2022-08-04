@@ -23,7 +23,6 @@ const register = async (): Promise<void> => {
 }
 
 const registerWithGoogle = async (): Promise<void> => {
-  isInProcess.value = true
   await usersStore.signInWithGoogle()
   router.push({ name: 'Home' })
 }

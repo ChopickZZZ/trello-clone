@@ -1,6 +1,7 @@
 import { useBoardStore } from './boards';
+import { useUsersStore } from './users';
 import { db, firestore } from '../firebase';
-import { getDocs, collection } from 'firebase/firestore';
+import { getDocs, collection, where } from 'firebase/firestore';
 import { defineStore } from "pinia";
 import { CardInfo } from "../types";
 
@@ -25,9 +26,10 @@ export const useCardStore = defineStore('cards', {
          const cardRef = db.collection('cards').doc()
          const boardRef = db.collection('boards').doc(card.boardId)
          const boardStore = useBoardStore()
+         const usersStore = useUsersStore()
 
-         this.cards.push({ ...card, id: cardRef.id })
-         batch.set(cardRef, card)
+         this.cards.push({ ...card, id: cardRef.id, userId: usersStore.authId! })
+         batch.set(cardRef, { ...card, userId: usersStore.authId })
          batch.update(boardRef, {
             cards: firestore.FieldValue.arrayUnion(cardRef.id)
          })
@@ -68,8 +70,13 @@ export const useCardStore = defineStore('cards', {
          const querySnapshot = await getDocs(collection(db, "cards"));
          querySnapshot.forEach((doc) => {
             const card = { ...doc.data() as CardInfo, id: doc.id }
-            this.cards.push(card)
+            if (card.userId === useUsersStore().authId) {
+               this.cards.push(card)
+            }
          });
       },
+      removeAllCards(): void {
+         this.cards.length = 0
+      }
    }
 })
