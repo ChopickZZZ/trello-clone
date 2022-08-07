@@ -8,3 +8,6 @@ export const firestore = firebase.firestore
 export const db = firebase.firestore();
 export const auth = firebase.auth()
 export const authInstance = firebase.auth
+
+export type User = firebase.User
+export type Unsubscribe = firebase.Unsubscribe

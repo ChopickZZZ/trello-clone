@@ -26,19 +26,14 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 library.add(faEllipsis, faClock, faCalendarCheck, faT, faBarsStaggered, faCalendarDays, faCircleCheck, faTrashCan, faTag, faXmark, faPlus, faCaretDown)
 
-auth.onAuthStateChanged(user => {
-   if (user) {
-      useUsersStore().fetchAuthUser()
-   }
-})
 const trelloApp = createApp(App)
 
 trelloApp
    .component('fa-icon', FontAwesomeIcon)
+   .use(createPinia())
    .use(router)
    .use(scrollLock)
    .use(focus)
-   .use(createPinia())
 
 trelloApp.mount('#app')
 

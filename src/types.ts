@@ -26,7 +26,7 @@ export interface Task {
    isDone: boolean
 }
 
-export interface User {
+export interface Guest {
    name: string,
    username: string,
    email: string,

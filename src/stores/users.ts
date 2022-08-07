@@ -2,17 +2,33 @@ import { defineStore } from "pinia";
 import { useBoardStore } from "./boards";
 import { useCardStore } from "./cards";
 import { docToResource } from "../helpers";
-import { AuthForm, User, UserToFirestore } from "../types";
-import { db, auth, authInstance } from '../firebase';
+import { AuthForm, Guest, UserToFirestore } from "../types";
+import { db, auth, authInstance, User, Unsubscribe } from '../firebase';
 import { collection, getDocs } from "firebase/firestore";
 
 export const useUsersStore = defineStore('users', {
    state: () => ({
       authId: null as string | null,
-      user: null as User | null
+      user: null as Guest | null,
+      authObserverUnsubscribe: null as Unsubscribe | null
    }),
    actions: {
-      async registerWithEmailAndPassword({ name, username, email, password, avatar }: User) {
+      initAuthentication() {
+         if (this.authObserverUnsubscribe) {
+            this.authObserverUnsubscribe()
+         }
+         return new Promise<User | null>(resolve => {
+            const unsubscribe = auth.onAuthStateChanged(user => {
+               if (user) {
+                  this.fetchAuthUser()
+                  resolve(user)
+               }
+               else resolve(null)
+            })
+            this.authObserverUnsubscribe = unsubscribe
+         })
+      },
+      async registerWithEmailAndPassword({ name, username, email, password, avatar }: Guest) {
          const result = await auth.createUserWithEmailAndPassword(email, password)
          if (result.user?.uid) {
             await this.createUser({ id: result.user?.uid, name, username, email, avatar })
@@ -59,7 +75,7 @@ export const useUsersStore = defineStore('users', {
          if (!this.authId) return
          const querySnapshot = await getDocs(collection(db, "users"));
          querySnapshot.forEach((doc) => {
-            const user = { ...doc.data() as User, id: doc.id }
+            const user = { ...doc.data() as Guest, id: doc.id }
             if (this.authId === user.id) {
                this.user = user
             }
