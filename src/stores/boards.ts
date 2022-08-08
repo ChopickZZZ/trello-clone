@@ -2,55 +2,60 @@ import { defineStore } from "pinia";
 import { useCardStore } from "./cards";
 import { useUsersStore } from "./users";
 import { BoardInfo } from '../types'
-import { db } from "../firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { db, firestore } from "../firebase";
+import { fetchItems } from "../helpers";
 
 export const useBoardStore = defineStore('boards', {
    state: () => ({
       boards: [] as BoardInfo[]
    }),
-   getters: {
-      boardsAmount: (state): number => state.boards.length,
-      getBoards: (state): BoardInfo[] => state.boards
-   },
    actions: {
       async addBoard(status: string): Promise<void> {
          const usersStore = useUsersStore()
          const board = {
             status,
             cards: [],
-            userId: usersStore.authId
+            userId: usersStore.authId,
          } as BoardInfo
 
          const batch = db.batch()
          const boardRef = db.collection('boards').doc()
+         const userRef = db.collection('users').doc(usersStore.authId!)
          this.boards.push({ ...board, id: boardRef.id })
+         usersStore.user?.boards.push(boardRef.id)
 
          batch.set(boardRef, board)
+         batch.update(userRef, {
+            boards: firestore.FieldValue.arrayUnion(boardRef.id)
+         })
          await batch.commit()
       },
       async removeBoard(boardId: string): Promise<void> {
          const cardStore = useCardStore()
+         const usersStore = useUsersStore()
          const batch = db.batch()
          const boardRef = db.collection('boards').doc(boardId)
+         const userRef = db.collection('users').doc(useUsersStore().authId!)
 
          const board = this.boards.find(board => board.id === boardId)
-         if (board) {
-            board.cards.forEach(card => cardStore.removeCard(card))
+         if (board === undefined) {
+            throw TypeError('No board find in firestore')
          }
+
+         board.cards.forEach(card => cardStore.removeCard(card))
          this.boards = this.boards.filter(board => board.id !== boardId)
+         usersStore.removeBoards(boardRef.id)
 
          batch.delete(boardRef)
+         batch.update(userRef, {
+            boards: firestore.FieldValue.arrayRemove(boardRef.id)
+         })
          await batch.commit()
       },
-      async fetchBoards(): Promise<void> {
-         const querySnapshot = await getDocs(collection(db, "boards"));
-         querySnapshot.forEach((doc) => {
-            const board = { ...doc.data() as BoardInfo, id: doc.id }
-            if (board.userId === useUsersStore().authId) {
-               this.boards.push(board)
-            }
-         });
+      async fetchBoards({ ids, resource }: { ids: string[] | undefined, resource: string }) {
+         if (ids) {
+            return fetchItems({ ids, resource })
+         }
       },
       removeAllBoards() {
          this.boards.length = 0

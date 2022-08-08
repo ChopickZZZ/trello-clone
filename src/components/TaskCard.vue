@@ -30,7 +30,7 @@ const openDropDown = (event: Event) => {
 </script>
 
 <template>
-  <div class="card">
+  <div class="card" draggable="true">
     <div class="card__top">
       <ul class="card__labels">
         <li class="card__label theme" v-for="label in props.card.labels" :style="{ backgroundColor: label.color }">

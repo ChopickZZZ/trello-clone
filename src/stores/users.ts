@@ -59,7 +59,7 @@ export const useUsersStore = defineStore('users', {
       async createUser({ id, name, username, email, avatar = null }: UserToFirestore) {
          const usernameLower = username.toLowerCase()
          email = email.toLowerCase()
-         const user = { name, username, email, usernameLower, avatar }
+         const user = { name, username, email, usernameLower, avatar, boards: [] }
 
          const userRef = db.collection('users').doc(id)
          userRef.set(user)
@@ -80,6 +80,11 @@ export const useUsersStore = defineStore('users', {
                this.user = user
             }
          });
+      },
+      removeBoards(boardId: string) {
+         if (this.user) {
+            this.user.boards = this.user.boards.filter(id => id !== boardId)
+         }
       }
    }
 })

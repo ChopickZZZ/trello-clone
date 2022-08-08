@@ -2,7 +2,7 @@ export interface BoardInfo {
    id?: string
    status: string,
    cards: string[],
-   userId: string
+   userId: string,
 }
 
 export interface CardInfo {
@@ -13,7 +13,6 @@ export interface CardInfo {
    labels?: Label[],
    tasks?: Task[]
    boardId: string,
-   userId: string
 }
 
 export interface Label {
@@ -27,11 +26,14 @@ export interface Task {
 }
 
 export interface Guest {
+   id?: string
    name: string,
    username: string,
    email: string,
    password: string,
-   avatar: string
+   avatar: string,
+   boards: string[],
+   usernameLower?: string
 }
 
 export interface UserToFirestore {

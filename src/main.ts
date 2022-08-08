@@ -5,8 +5,6 @@ import scrollLock from './plugins/scrollLock'
 import focus from './plugins/focus'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import { auth } from './firebase';
-import { useUsersStore } from './stores/users'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
    faEllipsis,

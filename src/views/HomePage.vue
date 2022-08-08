@@ -1,23 +1,19 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { useBoardStore } from "../stores/boards";
-import { useCardStore } from "../stores/cards";
 import { useUsersStore } from "../stores/users";
-import { BoardInfo } from "../types";
 import TaskBoard from "../components/TaskBoard.vue";
 import BoardCreator from "../components/BoardCreator.vue";
 
 const isReady = ref(false)
 
 const boardStore = useBoardStore()
-const cardStore = useCardStore()
 const usersStore = useUsersStore()
-await cardStore.fetchCards()
-await boardStore.fetchBoards()
 await usersStore.fetchUser()
-isReady.value = true
+await boardStore.fetchBoards({ ids: usersStore.user?.boards, resource: 'boards' })
 
-const boards = computed((): BoardInfo[] => boardStore.boards)
+const boards = computed(() => boardStore.boards)
+isReady.value = true
 </script>
 
 <template>

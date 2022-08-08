@@ -22,11 +22,12 @@ const isDropDownOpen = ref(false)
 const isEditing = ref(false)
 const cardId = ref('')
 
-const boardRemove = (): Promise<void> => boardStore.removeBoard(props.board.id!)
-
+await cardStore.fetchCards({ ids: props.board.cards, resource: 'cards' })
 const cards = computed((): CardInfo[] => {
   return cardStore.cards.filter(card => card.boardId === props.board.id)
 })
+
+const boardRemove = (): Promise<void> => boardStore.removeBoard(props.board.id!)
 
 const cardEdit = (id: string): void => {
   isEditing.value = true

@@ -11,3 +11,4 @@ export const authInstance = firebase.auth
 
 export type User = firebase.User
 export type Unsubscribe = firebase.Unsubscribe
+export type ServerTimestamp = firebase.firestore.FieldValue

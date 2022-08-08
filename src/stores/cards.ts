@@ -1,9 +1,8 @@
 import { useBoardStore } from './boards';
-import { useUsersStore } from './users';
 import { db, firestore } from '../firebase';
-import { getDocs, collection, where } from 'firebase/firestore';
 import { defineStore } from "pinia";
 import { CardInfo } from "../types";
+import { fetchItems } from '../helpers';
 
 export const useCardStore = defineStore('cards', {
    state: () => ({
@@ -26,10 +25,9 @@ export const useCardStore = defineStore('cards', {
          const cardRef = db.collection('cards').doc()
          const boardRef = db.collection('boards').doc(card.boardId)
          const boardStore = useBoardStore()
-         const usersStore = useUsersStore()
 
-         this.cards.push({ ...card, id: cardRef.id, userId: usersStore.authId! })
-         batch.set(cardRef, { ...card, userId: usersStore.authId })
+         this.cards.push({ ...card, id: cardRef.id })
+         batch.set(cardRef, { ...card })
          batch.update(boardRef, {
             cards: firestore.FieldValue.arrayUnion(cardRef.id)
          })
@@ -66,17 +64,11 @@ export const useCardStore = defineStore('cards', {
          batch.update(cardRef, { ...cardObj })
          await batch.commit()
       },
-      async fetchCards(): Promise<void> {
-         const querySnapshot = await getDocs(collection(db, "cards"));
-         querySnapshot.forEach((doc) => {
-            const card = { ...doc.data() as CardInfo, id: doc.id }
-            if (card.userId === useUsersStore().authId) {
-               this.cards.push(card)
-            }
-         });
+      async fetchCards({ ids, resource }: { ids: string[], resource: string }) {
+         return fetchItems({ ids, resource })
       },
       removeAllCards(): void {
          this.cards.length = 0
-      }
+      },
    }
 })
