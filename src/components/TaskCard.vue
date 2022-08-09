@@ -27,10 +27,16 @@ const openDropDown = (event: Event) => {
   isDropDownOpen.value = !isDropDownOpen.value
 }
 
+const pickUpCard = (event: { dataTransfer: any; }) => {
+  event.dataTransfer.effectAllowed = 'move'
+  event.dataTransfer.dropEffect = 'move'
+  event.dataTransfer.setData('card-id', props.card.id)
+}
+
 </script>
 
 <template>
-  <div class="card" draggable="true">
+  <div class="card" draggable="true" @dragstart="pickUpCard($event)">
     <div class="card__top">
       <ul class="card__labels">
         <li class="card__label theme" v-for="label in props.card.labels" :style="{ backgroundColor: label.color }">
@@ -88,12 +94,12 @@ const openDropDown = (event: Event) => {
 .card__top {
   display: flex;
   justify-content: space-between;
-  align-items: center;
 }
 
 .card__labels {
   display: flex;
-  gap: 1rem;
+  column-gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .card__label {

@@ -46,6 +46,6 @@ export interface UserToFirestore {
 }
 
 export interface AuthForm {
-   email: '',
-   password: ''
+   email: string,
+   password: string
 }

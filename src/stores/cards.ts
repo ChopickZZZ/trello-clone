@@ -23,14 +23,10 @@ export const useCardStore = defineStore('cards', {
       async addCard(card: CardInfo): Promise<void> {
          const batch = db.batch()
          const cardRef = db.collection('cards').doc()
-         const boardRef = db.collection('boards').doc(card.boardId)
          const boardStore = useBoardStore()
 
          this.cards.push({ ...card, id: cardRef.id })
          batch.set(cardRef, { ...card })
-         batch.update(boardRef, {
-            cards: firestore.FieldValue.arrayUnion(cardRef.id)
-         })
          boardStore.addCards(card.boardId, cardRef.id)
          await batch.commit()
       },
@@ -41,16 +37,12 @@ export const useCardStore = defineStore('cards', {
          }
          const batch = db.batch()
          const cardRef = db.collection('cards').doc(cardId)
-         const boardRef = db.collection('boards').doc(card.boardId)
          const boardStore = useBoardStore()
 
          this.cards = this.cards.filter(card => card.id !== cardId)
          boardStore.removeCards(card.boardId, cardRef.id)
 
          batch.delete(cardRef)
-         batch.update(boardRef, {
-            cards: firestore.FieldValue.arrayRemove(cardRef.id)
-         })
          await batch.commit()
       },
       async editCard(card: CardInfo) {
@@ -66,6 +58,21 @@ export const useCardStore = defineStore('cards', {
       },
       async fetchCards({ ids, resource }: { ids: string[], resource: string }) {
          return fetchItems({ ids, resource })
+      },
+      async moveCard({ cardId, toBoardId }: { cardId: string, toBoardId: string }) {
+         const card = this.cards.find(card => card.id === cardId)
+         if (card === undefined) {
+            throw TypeError('No card found in store')
+         }
+         useBoardStore().addCards(toBoardId, cardId)
+         useBoardStore().removeCards(card.boardId, cardId)
+         card.boardId = toBoardId
+         const batch = db.batch()
+         const cardRef = db.collection('cards').doc(cardId)
+         batch.update(cardRef, {
+            boardId: toBoardId
+         })
+         await batch.commit()
       },
       removeAllCards(): void {
          this.cards.length = 0

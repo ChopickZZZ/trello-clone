@@ -40,10 +40,15 @@ const modalToggle = (): void => {
   isModalOpen.value = !isModalOpen.value
 }
 
+const moveCard = (event: { dataTransfer: any; }) => {
+  const cardId: string = event.dataTransfer.getData('card-id')
+  cardStore.moveCard({ cardId, toBoardId: props.board.id! })
+}
+
 </script>
 
 <template>
-  <div class="board">
+  <div class="board" @drop="moveCard($event)" @dragover.prevent @dragenter.prevent>
     <div class="board__top top-board">
       <div class="top-board__status">
         {{ props.board.status }}

@@ -60,16 +60,28 @@ export const useBoardStore = defineStore('boards', {
       removeAllBoards() {
          this.boards.length = 0
       },
-      addCards(boardId: string, cardId: string) {
+      async addCards(boardId: string, cardId: string) {
          const board = this.boards.find(board => board.id === boardId)
          if (board) {
             board.cards.push(cardId)
+            const batch = db.batch()
+            const boardRef = db.collection('boards').doc(boardId)
+            batch.update(boardRef, {
+               cards: firestore.FieldValue.arrayUnion(cardId)
+            })
+            await batch.commit()
          }
       },
-      removeCards(boardId: string, cardId: string) {
+      async removeCards(boardId: string, cardId: string) {
          const board = this.boards.find(board => board.id === boardId)
          if (board) {
             board.cards = board.cards.filter(id => id !== cardId)
+            const batch = db.batch()
+            const boardRef = db.collection('boards').doc(boardId)
+            batch.update(boardRef, {
+               cards: firestore.FieldValue.arrayRemove(cardId)
+            })
+            await batch.commit()
          }
       }
    }
