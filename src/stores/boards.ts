@@ -60,29 +60,50 @@ export const useBoardStore = defineStore('boards', {
       removeAllBoards() {
          this.boards.length = 0
       },
-      async addCards(boardId: string, cardId: string) {
-         const board = this.boards.find(board => board.id === boardId)
-         if (board) {
-            board.cards.push(cardId)
-            const batch = db.batch()
-            const boardRef = db.collection('boards').doc(boardId)
-            batch.update(boardRef, {
-               cards: firestore.FieldValue.arrayUnion(cardId)
-            })
-            await batch.commit()
+      moveBoard({ fromBoardId, toBoardId }: { fromBoardId: string, toBoardId: string }) {
+         const usersStore = useUsersStore()
+         const fromBoardIdx = this.boards.findIndex(board => board.id === fromBoardId)
+         const ToBoardIdx = this.boards.findIndex(board => board.id === toBoardId)
+         if (fromBoardIdx === undefined || ToBoardIdx === undefined) {
+            throw TypeError('Board is not found in store')
          }
+         const boardToMove = this.boards.splice(fromBoardIdx, 1)[0]
+         this.boards.splice(ToBoardIdx, 0, boardToMove)
+         const boardIds = this.boards.map(board => board.id!)
+         usersStore.setBoards(boardIds)
+      },
+      async addCards(boardId: string, fromCardId: string, toCardId: string | null = null) {
+         const board = this.boards.find(board => board.id === boardId)
+         if (board === undefined) {
+            throw TypeError('No board found in store')
+         }
+         if (toCardId) {
+            const toCardIdx = board.cards.findIndex(id => id === toCardId)
+            board.cards.splice(toCardIdx + 1, 0, fromCardId)
+         }
+         else board.cards.push(fromCardId)
+
+         const batch = db.batch()
+         const boardRef = db.collection('boards').doc(boardId)
+         batch.update(boardRef, {
+            cards: board.cards
+         })
+         await batch.commit()
       },
       async removeCards(boardId: string, cardId: string) {
          const board = this.boards.find(board => board.id === boardId)
-         if (board) {
-            board.cards = board.cards.filter(id => id !== cardId)
-            const batch = db.batch()
-            const boardRef = db.collection('boards').doc(boardId)
-            batch.update(boardRef, {
-               cards: firestore.FieldValue.arrayRemove(cardId)
-            })
-            await batch.commit()
+         if (board === undefined) {
+            throw TypeError('no board found in store')
          }
+         const cardIdx = board.cards.findIndex(id => id === cardId)
+         board.cards.splice(cardIdx, 1)
+
+         const batch = db.batch()
+         const boardRef = db.collection('boards').doc(boardId)
+         batch.update(boardRef, {
+            cards: firestore.FieldValue.arrayRemove(cardId)
+         })
+         await batch.commit()
       }
    }
 })

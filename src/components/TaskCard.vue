@@ -4,6 +4,7 @@ import { ref, computed } from 'vue';
 import { useCardStore } from '../stores/cards';
 import { CardInfo } from '../types';
 import { dateFormatter } from '../use/date';
+import { pickUpCard } from '../use/dragAndDrop'
 
 const props = defineProps<{
   card: CardInfo
@@ -27,16 +28,11 @@ const openDropDown = (event: Event) => {
   isDropDownOpen.value = !isDropDownOpen.value
 }
 
-const pickUpCard = (event: { dataTransfer: any; }) => {
-  event.dataTransfer.effectAllowed = 'move'
-  event.dataTransfer.dropEffect = 'move'
-  event.dataTransfer.setData('card-id', props.card.id)
-}
-
 </script>
 
 <template>
-  <div class="card" draggable="true" @dragstart="pickUpCard($event)">
+  <div class="card" draggable="true" @dragstart="pickUpCard($event, props.card.id!)" @dragover.prevent
+    @dragenter.prevent>
     <div class="card__top">
       <ul class="card__labels">
         <li class="card__label theme" v-for="label in props.card.labels" :style="{ backgroundColor: label.color }">

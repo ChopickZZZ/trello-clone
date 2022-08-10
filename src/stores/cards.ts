@@ -59,16 +59,16 @@ export const useCardStore = defineStore('cards', {
       async fetchCards({ ids, resource }: { ids: string[], resource: string }) {
          return fetchItems({ ids, resource })
       },
-      async moveCard({ cardId, toBoardId }: { cardId: string, toBoardId: string }) {
-         const card = this.cards.find(card => card.id === cardId)
+      async moveCard({ fromCardId, toCardId, toBoardId }: { fromCardId: string, toCardId: string | null, toBoardId: string }) {
+         const card = this.cards.find(card => card.id === fromCardId)
          if (card === undefined) {
             throw TypeError('No card found in store')
          }
-         useBoardStore().addCards(toBoardId, cardId)
-         useBoardStore().removeCards(card.boardId, cardId)
+         useBoardStore().removeCards(card.boardId, fromCardId)
+         useBoardStore().addCards(toBoardId, fromCardId, toCardId)
          card.boardId = toBoardId
          const batch = db.batch()
-         const cardRef = db.collection('cards').doc(cardId)
+         const cardRef = db.collection('cards').doc(fromCardId)
          batch.update(cardRef, {
             boardId: toBoardId
          })

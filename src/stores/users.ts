@@ -81,6 +81,15 @@ export const useUsersStore = defineStore('users', {
             }
          });
       },
+      async setBoards(boards: string[]) {
+         if (this.user) {
+            this.user.boards = boards
+            const batch = db.batch()
+            const userRef = db.collection('users').doc(this.authId!)
+            batch.update(userRef, { boards })
+            await batch.commit()
+         }
+      },
       removeBoards(boardId: string) {
          if (this.user) {
             this.user.boards = this.user.boards.filter(id => id !== boardId)

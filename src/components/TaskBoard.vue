@@ -9,6 +9,7 @@ import { BoardInfo, CardInfo } from '../types'
 import { useCardStore } from "../stores/cards";
 import { useBoardStore } from "../stores/boards";
 import { ref, computed } from "vue";
+import { pickUpBoard, moveCardOrBoard } from '../use/dragAndDrop'
 
 interface Props {
   board: BoardInfo
@@ -23,32 +24,31 @@ const isEditing = ref(false)
 const cardId = ref('')
 
 await cardStore.fetchCards({ ids: props.board.cards, resource: 'cards' })
-const cards = computed((): CardInfo[] => {
-  return cardStore.cards.filter(card => card.boardId === props.board.id)
+
+const cards = computed((): CardInfo[] | Array<any> => {
+  const cards = props.board.cards.map(cardId => {
+    return cardStore.cards.find(card => card.id === cardId)
+  })
+  if (cards) return cards
+  return []
 })
-
-const boardRemove = (): Promise<void> => boardStore.removeBoard(props.board.id!)
-
-const cardEdit = (id: string): void => {
-  isEditing.value = true
-  cardId.value = id
-  isModalOpen.value = !isModalOpen.value
-}
 
 const modalToggle = (): void => {
   isEditing.value = false
   isModalOpen.value = !isModalOpen.value
 }
 
-const moveCard = (event: { dataTransfer: any; }) => {
-  const cardId: string = event.dataTransfer.getData('card-id')
-  cardStore.moveCard({ cardId, toBoardId: props.board.id! })
+const boardRemove = (): Promise<void> => boardStore.removeBoard(props.board.id!)
+const cardEdit = (id: string): void => {
+  isEditing.value = true
+  cardId.value = id
+  isModalOpen.value = !isModalOpen.value
 }
-
 </script>
 
 <template>
-  <div class="board" @drop="moveCard($event)" @dragover.prevent @dragenter.prevent>
+  <div class="board" draggable="true" @dragstart.self="pickUpBoard($event, props.board.id!)"
+    @drop="moveCardOrBoard($event, props.board.id!)" @dragover.prevent @dragenter.prevent>
     <div class="board__top top-board">
       <div class="top-board__status">
         {{ props.board.status }}
@@ -60,7 +60,8 @@ const moveCard = (event: { dataTransfer: any; }) => {
       <AppDropDown v-if="isDropDownOpen" @handler="boardRemove">Delete Board</AppDropDown>
     </div>
     <div class="board__inner inner-board">
-      <TaskCard v-for="card in cards" :key="card.id" :card="card" @click="cardEdit(card.id!)" />
+      <TaskCard v-for="card in cards" :key="card.id" :card="card" @click="cardEdit(card.id!)"
+        @drop.stop="moveCardOrBoard($event, props.board.id!, card.id)" />
       <AppButton @click="isModalOpen = true">Add Card</AppButton>
       <teleport to="#app">
         <AppModal v-if="isModalOpen" v-lock @modal-close="modalToggle">
