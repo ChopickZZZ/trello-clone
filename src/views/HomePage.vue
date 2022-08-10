@@ -18,10 +18,10 @@ isReady.value = true
 
 <template>
   <div class="container" style="margin-top: 5rem" v-if="isReady">
-    <div class="board-container">
+    <TransitionGroup class="board-container" tag="div" name="list">
       <TaskBoard v-for="board in boards" :key="board.id" :board="board" />
-      <BoardCreator />
-    </div>
+      <BoardCreator :key="0" />
+    </TransitionGroup>
   </div>
 </template>
 
@@ -31,5 +31,20 @@ isReady.value = true
   grid-template-columns: repeat(4, 35rem);
   align-items: start;
   gap: 2rem;
+}
+
+.list-move,
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.3s ease;
+}
+
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+}
+
+.list-leave-active {
+  position: absolute;
 }
 </style>

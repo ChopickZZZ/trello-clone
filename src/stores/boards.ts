@@ -72,16 +72,16 @@ export const useBoardStore = defineStore('boards', {
          const boardIds = this.boards.map(board => board.id!)
          usersStore.setBoards(boardIds)
       },
-      async addCards(boardId: string, fromCardId: string, toCardId: string | null = null) {
+      async addCards(boardId: string, cardId: string, toCardId: string | null = null) {
          const board = this.boards.find(board => board.id === boardId)
          if (board === undefined) {
             throw TypeError('No board found in store')
          }
          if (toCardId) {
             const toCardIdx = board.cards.findIndex(id => id === toCardId)
-            board.cards.splice(toCardIdx + 1, 0, fromCardId)
+            board.cards.splice(toCardIdx + 1, 0, cardId)
          }
-         else board.cards.push(fromCardId)
+         else board.cards.push(cardId)
 
          const batch = db.batch()
          const boardRef = db.collection('boards').doc(boardId)

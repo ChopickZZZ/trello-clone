@@ -42,7 +42,7 @@ const boardRemove = (): Promise<void> => boardStore.removeBoard(props.board.id!)
 const cardEdit = (id: string): void => {
   isEditing.value = true
   cardId.value = id
-  isModalOpen.value = !isModalOpen.value
+  isModalOpen.value = true
 }
 </script>
 
@@ -57,17 +57,23 @@ const cardEdit = (id: string): void => {
       <button class="top-board__dropdown" @click="isDropDownOpen = !isDropDownOpen">
         <fa-icon icon="ellipsis" />
       </button>
-      <AppDropDown v-if="isDropDownOpen" @handler="boardRemove">Delete Board</AppDropDown>
+      <Transition name="fade-down">
+        <AppDropDown v-if="isDropDownOpen" @handler="boardRemove">Delete Board</AppDropDown>
+      </Transition>
     </div>
     <div class="board__inner inner-board">
-      <TaskCard v-for="card in cards" :key="card.id" :card="card" @click="cardEdit(card.id!)"
-        @drop.stop="moveCardOrBoard($event, props.board.id!, card.id)" />
+      <TransitionGroup tag="div" name="list">
+        <TaskCard v-for="card in cards" :key="card.id" :card="card" @click="cardEdit(card.id!)"
+          @drop.stop="moveCardOrBoard($event, props.board.id!, card.id)" />
+      </TransitionGroup>
       <AppButton @click="isModalOpen = true">Add Card</AppButton>
       <teleport to="#app">
-        <AppModal v-if="isModalOpen" v-lock @modal-close="modalToggle">
-          <CardEditor v-if="isEditing" :card-id="cardId" @modal-close="modalToggle" />
-          <CardCreator :board-id="props.board.id!" @modal-close="isModalOpen = false" v-else />
-        </AppModal>
+        <Transition name="fade">
+          <AppModal v-if="isModalOpen" v-lock @modal-close="modalToggle">
+            <component :is="isEditing ? CardEditor : CardCreator" :card-id="cardId" :board-id="props.board.id!"
+              @modal-close="modalToggle" />
+          </AppModal>
+        </Transition>
       </teleport>
     </div>
   </div>
@@ -112,5 +118,20 @@ const cardEdit = (id: string): void => {
   border-radius: 0.5rem;
   max-height: 60rem;
   overflow: auto;
+}
+
+.list-move,
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.3s ease;
+}
+
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+}
+
+.list-leave-active {
+  position: absolute;
 }
 </style>

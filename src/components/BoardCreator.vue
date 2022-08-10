@@ -21,9 +21,19 @@ const cancel = (): void => {
     <AppButton v-if="!isCreating" @click="isCreating = true">
       Add Board
     </AppButton>
-    <AppInput placeholder="Enter Board Name" @submit="boardAdd" @cancel="cancel" v-else />
+    <AppInput placeholder="Enter Board Name" @submit="boardAdd" @cancel="cancel" v-if="isCreating" />
   </div>
 </template>
 
 <style scoped>
+.fade-up-enter-active,
+.fade-up-leave-active {
+  transition: 0.5s ease;
+}
+
+.fade-up-enter-from,
+.fade-up-leave-to {
+  opacity: 0;
+  transform: translateY(10rem);
+}
 </style>

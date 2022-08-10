@@ -55,7 +55,10 @@ const logout = async (): Promise<void> => {
             <button class="user__dropdown">
                <fa-icon icon="caret-down" />
             </button>
-            <AppDropDown @handler="logout" style="width: 20rem; top: 6.2rem;" v-if="isDropDownOpen">LogOut</AppDropDown>
+            <Transition name="fade-down">
+               <AppDropDown @handler="logout" style="width: 20rem; top: 6.2rem;" v-if="isDropDownOpen">LogOut
+               </AppDropDown>
+            </Transition>
          </a>
       </nav>
    </header>

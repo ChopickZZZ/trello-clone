@@ -26,7 +26,7 @@ const emit = defineEmits<{
 
 .modal__backdrop {
   width: 100%;
-  height: 100vh;
+  height: 120vh;
   background-color: rgba(0, 0, 0, 0.4);
   justify-content: center;
   cursor: pointer;
