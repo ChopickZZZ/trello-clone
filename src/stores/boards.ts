@@ -22,7 +22,7 @@ export const useBoardStore = defineStore('boards', {
          const boardRef = db.collection('boards').doc()
          const userRef = db.collection('users').doc(usersStore.authId!)
          this.boards.push({ ...board, id: boardRef.id })
-         usersStore.user?.boards.push(boardRef.id)
+         usersStore.user?.boards?.push(boardRef.id)
 
          batch.set(boardRef, board)
          batch.update(userRef, {

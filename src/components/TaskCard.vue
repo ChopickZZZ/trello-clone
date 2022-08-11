@@ -27,7 +27,6 @@ const openDropDown = (event: Event) => {
   event.stopPropagation()
   isDropDownOpen.value = !isDropDownOpen.value
 }
-
 </script>
 
 <template>

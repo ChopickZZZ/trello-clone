@@ -48,7 +48,7 @@ const logout = async (): Promise<void> => {
          <a class="navbar__user user" v-if="user" @click.prevent="isDropDownOpen = !isDropDownOpen">
             <div class="user__info">
                <div class="user__avatar-container">
-                  <img class="user__avatar" :src="user.avatar" :alt="`${user} Avatar`">
+                  <img class="user__avatar" :src="user.avatar || ''" :alt="`${user} Avatar`">
                </div>
                <span class="user__name">{{ user.username }}</span>
             </div>

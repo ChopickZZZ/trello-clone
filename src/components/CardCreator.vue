@@ -29,8 +29,10 @@ const addLabels = (actualLabels: Label[]): Label[] => card.labels = actualLabels
 const addTasks = (actualTasks: Task[]): Task[] => card.tasks = actualTasks
 
 const add = () => {
-   cardStore.addCard(card)
-   emit('modal-close')
+   if (card.title) {
+      cardStore.addCard(card)
+      emit('modal-close')
+   }
 }
 </script>
 
@@ -38,7 +40,7 @@ const add = () => {
    <div class="card-create">
       <div class="card-create__title-container">
          <fa-icon class="card-create__label-icon" icon="t" />
-         <label class="card-create__label" for="title">Title</label>
+         <label class="card-create__label" for="title">Title*</label>
       </div>
       <input class="card-create__input" type="text" id="title" placeholder="Add task title" v-model="card.title" />
       <div class="card-create__title-container">

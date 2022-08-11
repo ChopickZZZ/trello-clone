@@ -7,8 +7,10 @@ const isCreating = ref(false);
 const boardStore = useBoardStore();
 
 const boardAdd = (inputText: string): void => {
-  boardStore.addBoard(inputText);
-  isCreating.value = false
+  if (inputText) {
+    boardStore.addBoard(inputText);
+    isCreating.value = false
+  }
 };
 
 const cancel = (): void => {

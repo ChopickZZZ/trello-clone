@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
-import { useBoardStore } from "../stores/boards";
-import { useUsersStore } from "../stores/users";
 import TaskBoard from "../components/TaskBoard.vue";
 import BoardCreator from "../components/BoardCreator.vue";
+import { ref } from "vue";
+import { useBoardStore } from "../stores/boards";
+import { useUsersStore } from "../stores/users";
+import { storeToRefs } from "pinia";
 
 const isReady = ref(false)
 
@@ -12,7 +13,7 @@ const usersStore = useUsersStore()
 await usersStore.fetchUser()
 await boardStore.fetchBoards({ ids: usersStore.user?.boards, resource: 'boards' })
 
-const boards = computed(() => boardStore.boards)
+const { boards } = storeToRefs(boardStore)
 isReady.value = true
 </script>
 

@@ -22,8 +22,10 @@ const changeLabels = (actualLabels: Label[]): Label[] => editedCard.labels = act
 const changeTasks = (actualTasks: Task[]): Task[] => editedCard.tasks = actualTasks
 
 const cardEdit = (): void => {
-   cardStore.editCard(editedCard)
-   emit('modal-close')
+   if (editedCard.title) {
+      cardStore.editCard(editedCard)
+      emit('modal-close')
+   }
 }
 </script>
 

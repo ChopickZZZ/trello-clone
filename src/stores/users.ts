@@ -29,7 +29,7 @@ export const useUsersStore = defineStore('users', {
          })
       },
       async registerWithEmailAndPassword({ name, username, email, password, avatar }: Guest) {
-         const result = await auth.createUserWithEmailAndPassword(email, password)
+         const result = await auth.createUserWithEmailAndPassword(email, password!)
          if (result.user?.uid) {
             await this.createUser({ id: result.user?.uid, name, username, email, avatar })
          }
@@ -56,10 +56,10 @@ export const useUsersStore = defineStore('users', {
          useBoardStore().removeAllBoards()
          useCardStore().removeAllCards()
       },
-      async createUser({ id, name, username, email, avatar = null }: UserToFirestore) {
+      async createUser({ id, name, username, email, avatar = '' }: Guest) {
          const usernameLower = username.toLowerCase()
          email = email.toLowerCase()
-         const user = { name, username, email, usernameLower, avatar, boards: [] }
+         const user = { name, username, email, usernameLower, avatar, boards: [] } as UserToFirestore
 
          const userRef = db.collection('users').doc(id)
          userRef.set(user)
@@ -92,7 +92,7 @@ export const useUsersStore = defineStore('users', {
       },
       removeBoards(boardId: string) {
          if (this.user) {
-            this.user.boards = this.user.boards.filter(id => id !== boardId)
+            this.user.boards = this.user.boards?.filter(id => id !== boardId)
          }
       }
    }

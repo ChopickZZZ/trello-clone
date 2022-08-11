@@ -67,7 +67,7 @@ const cardEdit = (id: string): void => {
           @drop.stop="moveCardOrBoard($event, props.board.id!, card.id)" />
       </TransitionGroup>
       <AppButton @click="isModalOpen = true">Add Card</AppButton>
-      <teleport to="#app">
+      <teleport to="body">
         <Transition name="fade">
           <AppModal v-if="isModalOpen" v-lock @modal-close="modalToggle">
             <component :is="isEditing ? CardEditor : CardCreator" :card-id="cardId" :board-id="props.board.id!"

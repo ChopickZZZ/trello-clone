@@ -8,7 +8,7 @@ export interface BoardInfo {
 export interface CardInfo {
    id?: string,
    title: string,
-   description?: string,
+   description: string,
    date: string,
    labels?: Label[],
    tasks?: Task[]
@@ -29,20 +29,19 @@ export interface Guest {
    id?: string
    name: string,
    username: string,
-   email: string,
    password: string,
-   avatar: string,
-   boards: string[],
-   usernameLower?: string
+   email: string,
+   avatar: string | null,
+   boards?: string[]
 }
 
 export interface UserToFirestore {
-   id: string
    name: string,
    username: string,
    email: string,
-   avatar: string | null,
-   usernameLower?: string
+   avatar: string,
+   usernameLower?: string,
+   boards: string[]
 }
 
 export interface AuthForm {
