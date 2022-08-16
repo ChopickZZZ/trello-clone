@@ -27,8 +27,8 @@ const inputHandler = (): void => {
 }
 
 const inputCancel = (): void => {
-   inputValue.value = ''
    emit('cancel')
+   inputValue.value = ''
 }
 
 </script>
@@ -37,8 +37,10 @@ const inputCancel = (): void => {
    <div class="input-form" v-bind="$attrs">
       <input type="text" :placeholder="props.placeholder" v-model="inputValue" v-focus />
       <div class="input-form__buttons">
-         <AppButton :bg-color="firstBgColor" color="#fff" @click="inputHandler">{{ props.btnText }}</AppButton>
-         <AppButton :bg-color="secondBgColor" color="#fff" @click="inputCancel">
+         <AppButton :style="{ backgroundColor: firstBgColor, color: '#fff' }" @click="inputHandler">
+            {{ props.btnText }}
+         </AppButton>
+         <AppButton :style="{ backgroundColor: secondBgColor, color: '#fff' }" @click="inputCancel">
             <template #symbol>
                <fa-icon icon="xmark" />
             </template>

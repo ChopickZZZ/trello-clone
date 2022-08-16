@@ -19,12 +19,15 @@ if (props.tasks?.length) {
 }
 
 const createTask = (inputValue: string): void => {
-   tasks.value.push({
-      text: inputValue,
-      isDone: false
-   })
-   isCreating.value = false
-   emit('change', tasks.value)
+   if (inputValue) {
+      let tasksArr = tasks.value.concat({
+         text: inputValue,
+         isDone: false
+      })
+      tasks.value = tasksArr
+      isCreating.value = false
+      emit('change', tasks.value)
+   }
 }
 
 const removeTask = (idx: number): void => {

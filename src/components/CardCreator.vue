@@ -56,7 +56,7 @@ const add = () => {
       <input class="card-create__input" type="date" id="date" v-model="card.date" />
       <ModalLabels @change="addLabels" />
       <ModalTasks @change="addTasks" />
-      <AppButton bg-color="#379906" color="#fff" @click="add">Add Card</AppButton>
+      <AppButton :style="{ backgroundColor: '#379906', color: '#fff' }" @click="add">Add Card</AppButton>
    </div>
 </template>
 

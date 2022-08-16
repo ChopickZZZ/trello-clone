@@ -8,7 +8,7 @@ import CardEditor from "./CardEditor.vue";
 import { BoardInfo, CardInfo } from '../types'
 import { useCardStore } from "../stores/cards";
 import { useBoardStore } from "../stores/boards";
-import { ref, computed } from "vue";
+import { ref, computed, isReadonly } from "vue";
 import { pickUpBoard, moveCardOrBoard } from '../use/dragAndDrop'
 
 interface Props {

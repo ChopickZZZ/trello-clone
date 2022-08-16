@@ -1,17 +1,8 @@
 <script setup lang="ts">
-
-interface ButtonProps {
-  color?: string,
-  bgColor?: string,
-}
-const props = withDefaults(defineProps<ButtonProps>(), {
-  color: '#000',
-  bgColor: '#fff',
-})
 </script>
 
 <template>
-  <button class="main-button" :style="{ backgroundColor: props.bgColor, color: props.color }" v-bind="$attrs">
+  <button class="main-button" v-bind="$attrs">
     <span>
       <slot name="symbol">+</slot>
     </span>
@@ -27,6 +18,7 @@ const props = withDefaults(defineProps<ButtonProps>(), {
   font-weight: 700;
   width: 100%;
   padding: 0.8rem 0;
+  background-color: #fff;
   border-radius: 0.7rem;
   box-shadow: rgb(0 0 0 / 26%) 0px 3px 3px, rgb(0 0 0 / 6%) 0px 6px 6px;
   transition: all 0.3s ease;

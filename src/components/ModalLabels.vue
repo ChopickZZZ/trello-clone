@@ -23,18 +23,20 @@ if (props.labels?.length) {
 const isCreating = ref(false)
 const addLabel = (inputText: string): void => {
    if (inputText) {
-      labels.value.push({
+      let labelsArr = labels.value.concat({
          text: inputText,
          color: labelColor.value
       })
+      labels.value = labelsArr
+
       isCreating.value = false
       labelColor.value = ''
+      emit('change', labels.value)
    }
-   emit('change', labels.value)
 }
 
 const removeLabel = (idx: number): void => {
-   labels.value = labels.value.filter((_, index) => index !== idx)
+   labels.value = labels.value.filter((_, index) => index !== idx).map(label => ({ ...label }))
    emit('change', labels.value)
 }
 const cancel = (): void => {
@@ -63,7 +65,8 @@ const cancel = (): void => {
       </label>
    </div>
    <div class="content__button-container" v-if="!isCreating">
-      <AppButton v-if="!isCreating" @click="isCreating = true" bg-color="rgb(90, 90, 90)" color="#fff">
+      <AppButton v-if="!isCreating" @click="isCreating = true"
+         :style="{ backgroundColor: 'rgb(90, 90, 90)', color: '#fff' }">
          Add label
          <template #symbol>+</template>
       </AppButton>
