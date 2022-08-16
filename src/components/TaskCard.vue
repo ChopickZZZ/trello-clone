@@ -31,8 +31,8 @@ const openDropDown = (event: Event) => {
 
 <template>
   <div class="card" draggable="true" @dragstart="pickUpCard($event, props.card.id!)" @dragover.prevent
-    @dragenter.prevent>
-    <div class="card__top">
+    @dragenter.prevent v-page-scroll="() => (isDropDownOpen = false)">
+    <div class="card__top" v-click-outside="() => (isDropDownOpen = false)">
       <ul class="card__labels">
         <li class="card__label theme" v-for="label in props.card.labels" :style="{ backgroundColor: label.color }">
           {{ label.text }}

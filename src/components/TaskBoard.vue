@@ -48,13 +48,15 @@ const cardEdit = (id: string): void => {
 
 <template>
   <div class="board" draggable="true" @dragstart.self="pickUpBoard($event, props.board.id!)"
-    @drop="moveCardOrBoard($event, props.board.id!)" @dragover.prevent @dragenter.prevent>
+    @drop="moveCardOrBoard($event, props.board.id!)" @dragover.prevent @dragenter.prevent
+    v-page-scroll="() => (isDropDownOpen = false)">
     <div class="board__top top-board">
       <div class="top-board__status">
         {{ props.board.status }}
         <span>{{ props.board.cards.length }}</span>
       </div>
-      <button class="top-board__dropdown" @click="isDropDownOpen = !isDropDownOpen">
+      <button class="top-board__dropdown" @click="isDropDownOpen = !isDropDownOpen"
+        v-click-outside="() => (isDropDownOpen = false)">
         <fa-icon icon="ellipsis" />
       </button>
       <Transition name="fade-down">

@@ -17,7 +17,7 @@ const logout = async (): Promise<void> => {
 </script>
 
 <template>
-   <header class="header">
+   <header class="header" v-page-scroll="() => (isDropDownOpen = false)">
       <router-link :to="{ name: 'Home' }" class="header__logo">
          <svg width="50px" height="55px" viewBox="0 0 256 257" version="1.1" xmlns="http://www.w3.org/2000/svg"
             xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid">
@@ -45,7 +45,8 @@ const logout = async (): Promise<void> => {
          </svg>
       </router-link>
       <nav class="navbar">
-         <a class="navbar__user user" v-if="user" @click.prevent="isDropDownOpen = !isDropDownOpen">
+         <a class="navbar__user user" v-if="user" @click.prevent="isDropDownOpen = !isDropDownOpen"
+            v-click-outside="() => (isDropDownOpen = false)">
             <div class="user__info">
                <div class="user__avatar-container">
                   <img class="user__avatar" :src="user.avatar!" :alt="`${user} Avatar`">
