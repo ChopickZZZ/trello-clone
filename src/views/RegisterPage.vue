@@ -37,8 +37,8 @@ const registerWithGoogle = async (): Promise<void> => {
         <h1 class="auth-main__title">Register</h1>
         <AppFormField v-model="user.name" name="name" label="Name" />
         <AppFormField v-model="user.username" name="username" label="Username" />
-        <AppFormField v-model="user.email" name="email" label="Email" />
-        <AppFormField v-model="user.password" name="password" label="Password" />
+        <AppFormField type="email" v-model="user.email" name="email" label="Email" />
+        <AppFormField type="password" v-model="user.password" name="password" label="Password" />
         <div class="auth-main__form-control">
           <label for="avatar">Avatar</label>
           <input type="text" id="avatar" v-model="user.avatar" />

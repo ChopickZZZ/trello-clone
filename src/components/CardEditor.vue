@@ -49,7 +49,12 @@ const cardEdit = (): void => {
       <input class="card-create__input" type="date" id="date" v-model="editedCard.date" />
       <ModalLabels :labels="card.labels" @change="changeLabels" />
       <ModalTasks :tasks="card.tasks" @change="changeTasks" />
-      <AppButton :style="{ backgroundColor: '#379906', color: '#fff' }" @click="cardEdit">Edit Card</AppButton>
+      <AppButton :style="{ backgroundColor: '#379906', color: '#fff' }" @click="cardEdit">
+         <template #symbol>
+            <fa-icon style="font-size: 1.4rem" icon="pen" />
+         </template>
+         Edit Card
+      </AppButton>
    </div>
 </template>
 

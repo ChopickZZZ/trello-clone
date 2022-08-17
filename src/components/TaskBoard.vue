@@ -10,6 +10,7 @@ import { useCardStore } from "../stores/cards";
 import { useBoardStore } from "../stores/boards";
 import { ref, computed, isReadonly } from "vue";
 import { pickUpBoard, moveCardOrBoard } from '../use/dragAndDrop'
+import { setSkeletonStructure } from "../helpers";
 
 interface Props {
   board: BoardInfo
@@ -23,14 +24,10 @@ const isDropDownOpen = ref(false)
 const isEditing = ref(false)
 const cardId = ref('')
 
-await cardStore.fetchCards({ ids: props.board.cards, resource: 'cards' })
-
 const cards = computed((): CardInfo[] | Array<any> => {
-  const cards = props.board.cards.map(cardId => {
+  return props.board.cards.map(cardId => {
     return cardStore.cards.find(card => card.id === cardId)
   })
-  if (cards) return cards
-  return []
 })
 
 const modalToggle = (): void => {
@@ -38,7 +35,10 @@ const modalToggle = (): void => {
   isModalOpen.value = !isModalOpen.value
 }
 
-const boardRemove = (): Promise<void> => boardStore.removeBoard(props.board.id!)
+const boardRemove = (): void => {
+  boardStore.removeBoard(props.board.id!)
+  setSkeletonStructure()
+}
 const cardEdit = (id: string): void => {
   isEditing.value = true
   cardId.value = id

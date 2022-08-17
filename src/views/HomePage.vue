@@ -5,20 +5,23 @@ import { ref } from "vue";
 import { useBoardStore } from "../stores/boards";
 import { useUsersStore } from "../stores/users";
 import { storeToRefs } from "pinia";
+import { useCardStore } from "../stores/cards";
+import { setSkeletonStructure } from "../helpers";
 
 const isReady = ref(false)
 
-const boardStore = useBoardStore()
-const usersStore = useUsersStore()
-await usersStore.fetchUser()
-await boardStore.fetchBoards({ ids: usersStore.user?.boards, resource: 'boards' })
+await useUsersStore().fetchUser()
+await useBoardStore().fetchBoards({ ids: useUsersStore().user?.boards, resource: 'boards' })
 
-const { boards } = storeToRefs(boardStore)
+const { boards } = storeToRefs(useBoardStore())
+const cardIds = boards.value.map(board => board.cards).flat()
+await useCardStore().fetchCards({ ids: cardIds, resource: 'cards' })
+setSkeletonStructure()
 isReady.value = true
 </script>
 
 <template>
-  <div class="container" style="margin-top: 5rem" v-if="isReady">
+  <div class="container" v-if="isReady">
     <TransitionGroup class="board-container" tag="div" name="list">
       <TaskBoard v-for="board in boards" :key="board.id" :board="board" />
       <BoardCreator :key="0" />
@@ -28,6 +31,7 @@ isReady.value = true
 
 <style scoped>
 .board-container {
+  padding: 5rem 0;
   display: grid;
   grid-template-columns: repeat(4, 35rem);
   align-items: start;

@@ -5,6 +5,7 @@ import AppButton from './AppButton.vue';
 import { reactive } from 'vue';
 import { CardInfo, Task, Label } from '../types';
 import { useCardStore } from '../stores/cards';
+import { setSkeletonStructure } from '../helpers';
 
 const emit = defineEmits<{
    (event: 'add-card', cardId: string): void,
@@ -31,6 +32,7 @@ const addTasks = (actualTasks: Task[]): Task[] => card.tasks = actualTasks
 const add = () => {
    if (card.title) {
       cardStore.addCard(card)
+      setSkeletonStructure()
       emit('modal-close')
    }
 }

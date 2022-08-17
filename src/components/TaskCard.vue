@@ -5,6 +5,7 @@ import { useCardStore } from '../stores/cards';
 import { CardInfo } from '../types';
 import { dateFormatter } from '../use/date';
 import { pickUpCard } from '../use/dragAndDrop'
+import { setSkeletonStructure } from '../helpers';
 
 const props = defineProps<{
   card: CardInfo
@@ -13,7 +14,10 @@ const props = defineProps<{
 const cardStore = useCardStore()
 const isDropDownOpen = ref(false)
 
-const cardRemove = (): Promise<void> => cardStore.removeCard(props.card.id!)
+const cardRemove = (): void => {
+  cardStore.removeCard(props.card.id!)
+  setSkeletonStructure()
+}
 
 const tasksDoneAmount = computed((): number => {
   if (props.card.tasks === undefined) {

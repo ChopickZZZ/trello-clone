@@ -1,5 +1,6 @@
 import { useCardStore } from "../stores/cards";
 import { useBoardStore } from "../stores/boards";
+import { setSkeletonStructure } from "../helpers";
 
 export function pickUpBoard(event: Event & { dataTransfer: any; }, boardId: string) {
    event.dataTransfer.effectAllowed = 'move'
@@ -23,6 +24,7 @@ export function moveCardOrBoard(event: Event & { dataTransfer: any; }, toBoardId
       moveCard(event, toBoardId, cardId)
    }
    else { moveBoard(event, toBoardId) }
+   setSkeletonStructure()
 }
 
 function moveBoard(event: Event & { dataTransfer: any; }, toBoardId: string) {

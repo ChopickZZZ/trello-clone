@@ -39,4 +39,15 @@ function setItem({ resource, item }: { resource: string, item: any }) {
    }
 }
 
+export const setSkeletonStructure = () => {
+   const boardStore = useBoardStore()
+   if (boardStore.boards.length) {
+      const boardsArr = JSON.stringify(boardStore.boards.map(board => board.cards.length))
+      localStorage.setItem('skeleton', boardsArr)
+   }
+}
+
+export const removeSkeletonStructure = () => {
+   localStorage.removeItem('skeleton')
+}
 

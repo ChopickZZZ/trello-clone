@@ -35,8 +35,8 @@ const signInWithGoogle = async (): Promise<void> => {
       <div class="auth-container">
          <Form class="auth-main" @submit="signIn" :validation-schema="loginSchema">
             <h1 class="auth-main__title">LogIn</h1>
-            <AppFormField name="email" label="Email" v-model="form.email" />
-            <AppFormField name="password" label="Password" v-model="form.password" />
+            <AppFormField type="email" name="email" label="Email" v-model="form.email" />
+            <AppFormField type="password" name="password" label="Password" v-model="form.password" />
             <h2 class="auth__redirect">
                Don`t have an account yet? <router-link :to="{ name: 'Register' }">Register</router-link>
             </h2>

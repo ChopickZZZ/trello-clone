@@ -20,11 +20,12 @@ import {
    faTag,
    faXmark,
    faPlus,
-   faCaretDown
+   faCaretDown,
+   faPen
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faEllipsis, faClock, faCalendarCheck, faT, faBarsStaggered, faCalendarDays, faCircleCheck, faTrashCan, faTag, faXmark, faPlus, faCaretDown)
+library.add(faEllipsis, faClock, faCalendarCheck, faT, faBarsStaggered, faCalendarDays, faCircleCheck, faTrashCan, faTag, faXmark, faPlus, faCaretDown, faPen)
 
 const trelloApp = createApp(App)
 

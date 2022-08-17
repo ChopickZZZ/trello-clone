@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue';
 import { useUsersStore } from '../stores/users.js';
 import { useRouter } from 'vue-router';
+import { removeSkeletonStructure } from '../helpers';
 import AppDropDown from './AppDropDown.vue';
 const router = useRouter()
 const usersStore = useUsersStore()
@@ -12,6 +13,7 @@ const user = computed(() => usersStore.user)
 const logout = async (): Promise<void> => {
    await usersStore.signOut()
    isDropDownOpen.value = false
+   removeSkeletonStructure()
    router.push({ name: 'Login' })
 }
 </script>
@@ -49,7 +51,8 @@ const logout = async (): Promise<void> => {
             v-click-outside="() => (isDropDownOpen = false)">
             <div class="user__info">
                <div class="user__avatar-container">
-                  <img class="user__avatar" :src="user.avatar!" :alt="`${user} Avatar`">
+                  <img class="user__avatar" :src="user.avatar ? user.avatar : 'public/user.png'"
+                     :alt="`${user} Avatar`">
                </div>
                <span class="user__name">{{ user.username }}</span>
             </div>

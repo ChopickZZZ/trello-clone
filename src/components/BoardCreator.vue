@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { setSkeletonStructure } from "../helpers";
 import { useBoardStore } from "../stores/boards";
 import AppButton from "./AppButton.vue";
 import AppInput from "./AppInput.vue";
@@ -10,6 +11,7 @@ const boardAdd = (inputText: string): void => {
   if (inputText) {
     boardStore.addBoard(inputText);
     isCreating.value = false
+    setSkeletonStructure()
   }
 };
 
