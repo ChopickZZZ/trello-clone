@@ -2,11 +2,11 @@ import { defineStore } from "pinia";
 import { useBoardStore } from "./boards";
 import { useCardStore } from "./cards";
 import { docToResource } from "../helpers";
-import { AuthForm, Guest, UserToFirestore } from "../types";
+import { Guest, UserToFirestore } from "../types";
 import { db, auth, authInstance, User, Unsubscribe } from '../firebase';
 import { collection, getDocs } from "firebase/firestore";
 
-export const useUsersStore = defineStore('users', {
+export const useUserStore = defineStore('users', {
    state: () => ({
       authId: null as string | null,
       user: null as Guest | null,
@@ -34,7 +34,7 @@ export const useUsersStore = defineStore('users', {
             await this.createUser({ id: result.user?.uid, name, username, email, avatar })
          }
       },
-      async signInWithEmailAndPassword({ email, password }: AuthForm) {
+      async signInWithEmailAndPassword({ email, password }: { email: string, password: string }) {
          return auth.signInWithEmailAndPassword(email, password)
       },
       async signInWithGoogle() {
@@ -56,9 +56,9 @@ export const useUsersStore = defineStore('users', {
          useBoardStore().removeAllBoards()
          useCardStore().removeAllCards()
       },
-      async createUser({ id, name, username, email, avatar = '' }: Guest) {
-         const usernameLower = username.toLowerCase()
-         email = email.toLowerCase()
+      async createUser({ id, name, username, email, avatar = '' }: Partial<Guest>) {
+         const usernameLower = username?.toLowerCase()
+         email = email?.toLowerCase()
          const user = { name, username, email, usernameLower, avatar, boards: [] } as UserToFirestore
 
          const userRef = db.collection('users').doc(id)

@@ -1,23 +1,22 @@
 <script setup lang="ts">
 import AppFormField from '../components/AppFormField.vue';
 import { ref, reactive } from 'vue';
-import { AuthForm } from '../types'
-import { useUsersStore } from '../stores/users.js';
+import { useUserStore } from '../stores/users.js';
 import { useRouter } from 'vue-router';
 import { Form } from 'vee-validate'
 import { loginSchema } from '../use/formValidation'
 const router = useRouter()
-const usersStore = useUsersStore()
+const userStore = useUserStore()
 
 const isInProcess = ref(false)
-const form: AuthForm = reactive({
+const form: { email: string, password: string } = reactive({
    email: '',
    password: ''
 })
 const signIn = async (): Promise<void> => {
    try {
       isInProcess.value = true
-      await usersStore.signInWithEmailAndPassword({ ...form })
+      await userStore.signInWithEmailAndPassword({ ...form })
       router.push({ name: 'Home' })
    } catch (e: unknown) {
       router.push({ name: 'Login', query: { incorrect: 'login or password' } })
@@ -25,7 +24,7 @@ const signIn = async (): Promise<void> => {
    }
 }
 const signInWithGoogle = async (): Promise<void> => {
-   await usersStore.signInWithGoogle()
+   await userStore.signInWithGoogle()
    router.push({ name: 'Home' })
 }
 </script>

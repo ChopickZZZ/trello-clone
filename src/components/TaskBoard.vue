@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import TaskCard from "./TaskCard.vue";
 import AppButton from "./AppButton.vue";
-import AppModal from "../ui/AppModal.vue";
+import AppModal from "./modal/AppModal.vue";
 import AppDropDown from "./AppDropDown.vue";
-import CardCreator from "./CardCreator.vue";
-import CardEditor from "./CardEditor.vue";
+import CardCreator from "./modal/CardCreator.vue";
+import CardEditor from "./modal/CardEditor.vue";
 import { BoardInfo, CardInfo } from '../types'
 import { useCardStore } from "../stores/cards";
 import { useBoardStore } from "../stores/boards";
-import { ref, computed, isReadonly } from "vue";
+import { ref, computed } from "vue";
 import { pickUpBoard, moveCardOrBoard } from '../use/dragAndDrop'
 import { setSkeletonStructure } from "../helpers";
 

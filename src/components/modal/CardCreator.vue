@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import ModalLabels from './ModalLabels.vue';
 import ModalTasks from './ModalTasks.vue';
-import AppButton from './AppButton.vue';
+import AppButton from '../AppButton.vue';
 import { reactive } from 'vue';
-import { CardInfo, Task, Label } from '../types';
-import { useCardStore } from '../stores/cards';
-import { setSkeletonStructure } from '../helpers';
+import { CardInfo, Task, Label } from '../../types';
+import { useCardStore } from '../../stores/cards';
+import { setSkeletonStructure } from '../../helpers';
 
 const emit = defineEmits<{
    (event: 'add-card', cardId: string): void,
@@ -49,8 +49,8 @@ const add = () => {
          <fa-icon class="card-create__label-icon" icon="bars-staggered" />
          <label class="card-create__label" for="description">Description</label>
       </div>
-      <input class="card-create__input" type="text" id="description" placeholder="Add description"
-         v-model="card.description" />
+      <textarea class="card-create__area" type="text" id="description" placeholder="Add description"
+         v-model="card.description"></textarea>
       <div class="card-create__title-container">
          <fa-icon class="card-create__label-icon" icon="calendar-days" />
          <label class="card-create__label" for="date">Date</label>
@@ -69,7 +69,7 @@ const add = () => {
    top: 50%;
    left: 50%;
    transform: translate(-50%, -50%);
-   width: 600px;
+   width: 57rem;
    display: flex;
    flex-direction: column;
    align-items: flex-start;
@@ -96,11 +96,16 @@ const add = () => {
    font-size: 1.8rem;
 }
 
-.card-create__input {
-   width: 25rem;
+.card-create__input,
+.card-create__area {
+   width: 27rem;
    background-color: rgb(235, 235, 235);
    padding: 1rem 2rem;
    border-radius: 0.3rem;
    margin-bottom: 3rem;
+}
+
+.card-create__area {
+   height: 10rem;
 }
 </style>

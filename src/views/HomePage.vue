@@ -3,15 +3,15 @@ import TaskBoard from "../components/TaskBoard.vue";
 import BoardCreator from "../components/BoardCreator.vue";
 import { ref } from "vue";
 import { useBoardStore } from "../stores/boards";
-import { useUsersStore } from "../stores/users";
+import { useUserStore } from "../stores/users";
 import { storeToRefs } from "pinia";
 import { useCardStore } from "../stores/cards";
 import { setSkeletonStructure } from "../helpers";
 
 const isReady = ref(false)
 
-await useUsersStore().fetchUser()
-await useBoardStore().fetchBoards({ ids: useUsersStore().user?.boards, resource: 'boards' })
+await useUserStore().fetchUser()
+await useBoardStore().fetchBoards({ ids: useUserStore().user?.boards, resource: 'boards' })
 
 const { boards } = storeToRefs(useBoardStore())
 const cardIds = boards.value.map(board => board.cards).flat()

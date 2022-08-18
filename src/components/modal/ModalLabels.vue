@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import AppButton from './AppButton.vue';
-import AppInput from './AppInput.vue';
+import AppButton from '../AppButton.vue';
+import AppInput from '../AppInput.vue';
 import { Ref, ref } from 'vue';
-import { Label } from "../types"
+import { Label } from "../../types"
 
 const props = defineProps<{
    labels?: Label[]
@@ -12,7 +12,7 @@ const emit = defineEmits<{
    (event: 'change', labels: Label[]): void
 }>()
 
-const colors: string[] = ['salmon', 'lightblue', '#777', '#379906', '#99066f', '#8a0c0c', '#000', '#0c138a']
+const colors: string[] = ['#31bd02', '#d18006', '#750f19', '#b84ba6', '#99066f', '#282975', '#1f85f2', '#000']
 const labelColor = ref('')
 
 let labels: Ref<Label[]> = ref([])
@@ -129,6 +129,7 @@ const cancel = (): void => {
    border-radius: 50%;
    display: inline-block;
    opacity: 0;
+   transform: scale(1.1);
    transition: opacity .35s ease;
 }
 

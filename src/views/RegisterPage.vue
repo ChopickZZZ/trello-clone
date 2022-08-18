@@ -5,10 +5,10 @@ import { useRouter } from 'vue-router';
 import { Form } from 'vee-validate'
 import { registerSchema } from '../use/formValidation'
 import { Guest } from '../types';
-import { useUsersStore } from '../stores/users'
+import { useUserStore } from '../stores/users'
 
 const router = useRouter()
-const usersStore = useUsersStore()
+const userStore = useUserStore()
 const user: Guest = reactive({
   name: '',
   username: '',
@@ -20,12 +20,12 @@ const user: Guest = reactive({
 const isInProcess = ref(false)
 const register = async (): Promise<void> => {
   isInProcess.value = true
-  await usersStore.registerWithEmailAndPassword(user)
+  await userStore.registerWithEmailAndPassword(user)
   router.push({ name: 'Home' })
 }
 
 const registerWithGoogle = async (): Promise<void> => {
-  await usersStore.signInWithGoogle()
+  await userStore.signInWithGoogle()
   router.push({ name: 'Home' })
 }
 </script>

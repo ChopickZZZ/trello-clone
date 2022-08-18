@@ -1,9 +1,9 @@
 export function dateFormatter(date: string): string {
-   const months: string[] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
    let [_, month, day] = date.split('-')
 
-   if (day.indexOf('0') !== -1) {
+   if (day[0] === '0') {
       day = day.slice(1)
    }
 

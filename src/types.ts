@@ -43,8 +43,3 @@ export interface UserToFirestore {
    usernameLower?: string,
    boards: string[]
 }
-
-export interface AuthForm {
-   email: string,
-   password: string
-}

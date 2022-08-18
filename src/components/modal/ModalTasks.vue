@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import AppButton from './AppButton.vue';
-import AppInput from './AppInput.vue';
+import AppButton from '../AppButton.vue';
+import AppInput from '../AppInput.vue';
 import { ref, Ref, computed } from 'vue'
-import { Task } from '../types'
+import { Task } from '../../types'
 
 const props = defineProps<{
    tasks?: Task[]

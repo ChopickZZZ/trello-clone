@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import TheHeader from './components/TheHeader.vue';
-import SkeletonBoardlist from './components/SkeletonBoardlist.vue'
+import SkeletonBoardlist from './components/loading/SkeletonBoardlist.vue'
 </script>
 
 <template>

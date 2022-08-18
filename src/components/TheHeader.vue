@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { useUsersStore } from '../stores/users.js';
+import { useUserStore } from '../stores/users.js';
 import { useRouter } from 'vue-router';
 import { removeSkeletonStructure } from '../helpers';
 import AppDropDown from './AppDropDown.vue';
 const router = useRouter()
-const usersStore = useUsersStore()
+const userStore = useUserStore()
 
 const isDropDownOpen = ref(false)
-const user = computed(() => usersStore.user)
+const user = computed(() => userStore.user)
 
 const logout = async (): Promise<void> => {
-   await usersStore.signOut()
+   await userStore.signOut()
    isDropDownOpen.value = false
    removeSkeletonStructure()
    router.push({ name: 'Login' })

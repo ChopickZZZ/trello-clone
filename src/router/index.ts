@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import { useUsersStore } from '../stores/users'
+import { useUserStore } from '../stores/users'
 import HomePage from '@/views/HomePage.vue'
 
 const routes: Array<RouteRecordRaw> = [
@@ -32,13 +32,13 @@ const router = createRouter({
 })
 
 router.beforeEach(async to => {
-   const usersStore = useUsersStore()
-   await usersStore.initAuthentication()
+   const userStore = useUserStore()
+   await userStore.initAuthentication()
 
-   if (to.meta.requiresAuth && !usersStore.authId) {
+   if (to.meta.requiresAuth && !userStore.authId) {
       return { name: 'Login' }
    }
-   else if (!to.meta.requiresAuth && usersStore.authId) {
+   else if (!to.meta.requiresAuth && userStore.authId) {
       return { name: 'Home' }
    }
 })

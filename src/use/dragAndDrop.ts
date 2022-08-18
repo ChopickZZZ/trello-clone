@@ -2,24 +2,26 @@ import { useCardStore } from "../stores/cards";
 import { useBoardStore } from "../stores/boards";
 import { setSkeletonStructure } from "../helpers";
 
-export function pickUpBoard(event: Event & { dataTransfer: any; }, boardId: string) {
-   event.dataTransfer.effectAllowed = 'move'
-   event.dataTransfer.dropEffect = 'move'
-
-   event.dataTransfer.setData('from-board-id', boardId)
-   event.dataTransfer.setData('type', 'board')
+export function pickUpBoard(event: DragEvent, boardId: string) {
+   pickUpItem(event, 'board', boardId)
 }
 
-export function pickUpCard(event: { dataTransfer: any; }, cardId: string) {
-   event.dataTransfer.effectAllowed = 'move'
-   event.dataTransfer.dropEffect = 'move'
-
-   event.dataTransfer.setData('from-card-id', cardId)
-   event.dataTransfer.setData('type', 'card')
+export function pickUpCard(event: DragEvent, cardId: string) {
+   pickUpItem(event, 'card', cardId)
 }
 
-export function moveCardOrBoard(event: Event & { dataTransfer: any; }, toBoardId: string, cardId: string | null = null) {
-   const type = event.dataTransfer.getData('type')
+function pickUpItem(event: DragEvent, type: string, itemId: string) {
+   if (event.dataTransfer !== null) {
+      event.dataTransfer.effectAllowed = 'move'
+      event.dataTransfer.dropEffect = 'move'
+
+      event.dataTransfer.setData(`from-${type}-id`, itemId)
+      event.dataTransfer.setData('type', type)
+   }
+}
+
+export function moveCardOrBoard(event: DragEvent, toBoardId: string, cardId: string | null = null) {
+   const type = event.dataTransfer?.getData('type')
    if (type === 'card') {
       moveCard(event, toBoardId, cardId)
    }
@@ -27,12 +29,16 @@ export function moveCardOrBoard(event: Event & { dataTransfer: any; }, toBoardId
    setSkeletonStructure()
 }
 
-function moveBoard(event: Event & { dataTransfer: any; }, toBoardId: string) {
-   const fromBoardId = event.dataTransfer.getData('from-board-id')
-   useBoardStore().moveBoard({ fromBoardId, toBoardId })
+function moveBoard(event: DragEvent, toBoardId: string) {
+   if (event.dataTransfer !== null) {
+      const fromBoardId = event.dataTransfer.getData('from-board-id')
+      useBoardStore().moveBoard({ fromBoardId, toBoardId })
+   }
 }
 
-function moveCard(event: Event & { dataTransfer: any; }, toBoardId: string, toCardId: string | null = null) {
-   const fromCardId: string = event.dataTransfer.getData('from-card-id')
-   useCardStore().moveCard({ fromCardId, toCardId, toBoardId })
+function moveCard(event: DragEvent, toBoardId: string, toCardId: string | null = null) {
+   if (event.dataTransfer !== null) {
+      const fromCardId = event.dataTransfer.getData('from-card-id')
+      useCardStore().moveCard({ fromCardId, toCardId, toBoardId })
+   }
 }

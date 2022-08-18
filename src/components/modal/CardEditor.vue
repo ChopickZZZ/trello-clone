@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import ModalLabels from './ModalLabels.vue';
 import ModalTasks from './ModalTasks.vue';
-import AppButton from './AppButton.vue';
+import AppButton from '../AppButton.vue';
 import { reactive } from 'vue'
-import { useCardStore } from '../stores/cards.js';
-import { CardInfo, Label, Task } from '../types';
+import { useCardStore } from '../../stores/cards.js';
+import { CardInfo, Label, Task } from '../../types';
 
 const props = defineProps<{
    cardId: string
@@ -40,8 +40,8 @@ const cardEdit = (): void => {
          <fa-icon class="card-create__label-icon" icon="bars-staggered" />
          <label class="card-create__label" for="description">Description</label>
       </div>
-      <input class="card-create__input" type="text" id="description" placeholder="Add description"
-         v-model="editedCard.description" />
+      <textarea class="card-create__area" type="text" id="description" placeholder="Add description"
+         v-model="editedCard.description"></textarea>
       <div class="card-create__title-container">
          <fa-icon class="card-create__label-icon" icon="calendar-days" />
          <label class="card-create__label" for="date">Date</label>

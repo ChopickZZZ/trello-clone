@@ -1,5 +1,5 @@
 import { useBoardStore } from './boards';
-import { db, firestore } from '../firebase';
+import { db } from '../firebase';
 import { defineStore } from "pinia";
 import { CardInfo } from "../types";
 import { fetchItems } from '../helpers';
@@ -64,6 +64,31 @@ export const useCardStore = defineStore('cards', {
          if (card === undefined) {
             throw TypeError('No card found in store')
          }
+         if (card.boardId !== toBoardId) {
+            this.moveCardtoAnotherBoard({ card, fromCardId, toCardId, toBoardId })
+         }
+         else {
+            this.switchCards({ fromCardId, toCardId, toBoardId })
+         }
+      },
+      async switchCards({ fromCardId, toCardId, toBoardId }: { fromCardId: string, toCardId: string | null, toBoardId: string }) {
+         const board = useBoardStore().boards.find(board => board.id === toBoardId)
+         if (board === undefined) {
+            throw TypeError('no board found in store')
+         }
+         const fromCardIdx = board.cards.findIndex(id => id === fromCardId)
+         const toCardIdx = board.cards.findIndex(id => id === toCardId)
+         const cardToMove = board.cards.splice(fromCardIdx, 1)[0]
+         board.cards.splice(toCardIdx, 0, cardToMove!)
+
+         const batch = db.batch()
+         const boardRef = db.collection('boards').doc(toBoardId)
+         batch.update(boardRef, {
+            cards: board.cards
+         })
+         await batch.commit()
+      },
+      async moveCardtoAnotherBoard({ card, fromCardId, toCardId, toBoardId }: { card: CardInfo, fromCardId: string, toCardId: string | null, toBoardId: string }) {
          useBoardStore().removeCards(card.boardId, fromCardId)
          useBoardStore().addCards(toBoardId, fromCardId, toCardId)
          card.boardId = toBoardId
