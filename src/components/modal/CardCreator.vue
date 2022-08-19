@@ -70,13 +70,14 @@ const add = () => {
    left: 50%;
    transform: translate(-50%, -50%);
    width: 57rem;
+   max-height: 72rem;
    display: flex;
    flex-direction: column;
    align-items: flex-start;
    background-color: #fff;
    border-radius: 0.5rem;
    z-index: 101;
-   overflow: hidden;
+   overflow: auto;
 }
 
 .card-create__title-container {
@@ -99,6 +100,7 @@ const add = () => {
 .card-create__input,
 .card-create__area {
    width: 27rem;
+   min-height: 4.1rem;
    background-color: rgb(235, 235, 235);
    padding: 1rem 2rem;
    border-radius: 0.3rem;
@@ -106,6 +108,6 @@ const add = () => {
 }
 
 .card-create__area {
-   height: 10rem;
+   min-height: 10rem;
 }
 </style>

@@ -64,7 +64,7 @@ export const useUserStore = defineStore('users', {
          const userRef = db.collection('users').doc(id)
          userRef.set(user)
          const newUser = await userRef.get()
-         this.user = docToResource(newUser)
+         this.user = docToResource(newUser) as Guest
       },
       fetchAuthUser() {
          const userId = auth.currentUser?.uid

@@ -51,8 +51,7 @@ const logout = async (): Promise<void> => {
             v-click-outside="() => (isDropDownOpen = false)">
             <div class="user__info">
                <div class="user__avatar-container">
-                  <img class="user__avatar" :src="user.avatar ? user.avatar : 'public/user.png'"
-                     :alt="`${user} Avatar`">
+                  <img class="user__avatar" :src="user.avatar ? user.avatar : '/user.png'" :alt="`${user} Avatar`">
                </div>
                <span class="user__name">{{ user.username }}</span>
             </div>

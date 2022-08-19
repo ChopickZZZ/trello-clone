@@ -1,7 +1,7 @@
 import { DocumentData } from 'firebase/firestore';
 import { useCardStore } from '../stores/cards';
 import { useBoardStore } from '../stores/boards';
-import { BoardInfo, CardInfo } from '../types';
+import { BoardInfo, CardInfo, Guest } from '../types';
 import { db } from '../firebase';
 
 export const docToResource = (doc: DocumentData): DocumentData | Item => {
@@ -13,7 +13,7 @@ export function fetchItems({ ids, resource }: { ids: string[], resource: string 
    return Promise.all(ids.map(id => fetchItem({ id, resource })))
 }
 
-type Item = BoardInfo | CardInfo
+type Item = BoardInfo | CardInfo | Guest
 
 function fetchItem({ id, resource }: { id: string, resource: string }): Promise<Item> {
    return new Promise(resolve => {
